@@ -1,5 +1,7 @@
 # iNitrOMZ
 iNitrOMZ is a nitrogen-centric biogeochemical model embeded in a below-mixed layer 1-D advection diffusion model. The model resolves a comprehensive set of processes involved in the remineralization of the sinking organic matter, starting from an imposed export flux at the base of the mixed-layer.
+
+*** This is Pearse Buchanan's version that considers microbes as explicit biomasses ***
     
 ## Table of Contents
 
