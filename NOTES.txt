@@ -1,0 +1,252 @@
+Notes for NitrOMZ:
+
+%%%%%%%%%%%%%%%%%%%%%%
+bgc1d_run
+%%%%%%%%%%%%%%%%%%%%%%
+- Sets bgc structure
+- Calls bgc1_initialize
+
+	%%%%%%%%%%%%%%%%%%%%%%
+	bgc1d_initialize
+	%%%%%%%%%%%%%%%%%%%%%%
+	- Initializes model parameters
+	- Sets name of model run, region
+	- Sets vertical grid options
+		- # of depths, top/bottom
+		- 130, -30 to -1330
+	- Sets timestep of model
+		- Variable time-stepping
+		- Starts at 5 days, progresses to 3 hours (in seconds)
+		- 5 days from 0 - 650 years
+		- ...
+		- 3 hours from year 698 to 700
+		- Calls bgc1d_process_time_stepping
+
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		bgc1d_process_time_stepping
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		- outputs a vector of each time-step (in seconds)
+		- ...again, 5 days to 3 hours
+		- also gives 'time_vec', which is in days
+		- i.e. time_vec(end)/365 = 700 years
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	- Sets advection/diffusion scheme to FTCS
+		- Currently 'Forward in time, centered in space'	
+
+	- Sets particle sinking speed using Martin Curve
+		- 'varsink' = 1, so Martin Curve
+		- recall: d(flux of OM)/dz = -w_sink*(d(POC)/dz)
+		- ... S&G pg 222
+
+	- Sets upwelling speed
+		- Currently constant at ~10m/yr
+	
+	- Sets diffusion parameters
+		- Not constant, splits profile into 'top' and 'bot'
+		- 'top' has less diffusion then 'bot'
+		- split at -250m?
+		- not sure what 'width' is for
+
+	- Sets boundary conditions
+		- Calls bgc1d_initboundary
+
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		bgc1d_initboundary
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		- Sets boundary conditions at 'top' and 'bot'
+		- i.e. -30m and -1330m
+		- O2, NO3, PO4, N2O, NH4, NO2, N2 based on region
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	- Sets BGC/N-cycling parameters
+		- Calls bgc1d_initbgc_params
+		
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		bgc1d_initbgc_params
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		NOTES: 
+		not sure why half-sats for denitrif are all in units of [NO3]
+		what is KO2Ax used for in Anammox?
+
+		- Parameter choices
+		- Stoichiometric ratios (C:H:O:N:P)
+		- ... Anderson/Sarmiento ratios (106:175:42:16)
+		- Sets N-cycle rate parameters for the following:
+		
+		!!! Ammonification !!! (OM --> NH4)
+		- Krem      = max rate of OM remin (1/s)
+		- KO2rem    = half-sat for respiration ([O2]/s)
+		
+		!!! Ammox !!! (NH4 --> NO2)
+		- KAo       = max rate of Ammox ([N]/s)
+		- KNH4Ao    = half-sat for nh4 loss via ammox ([N]/s)
+		- KO2Ao     = half-sat for o2 loss via ammox ([O2]/s)
+		- Ji_a/Ji_b = O2 dependent parameters for calculating
+			      N2O vs NO2 yield during Ammox (called in n2o_yield)
+			
+		!!! Nitrox !!! (NO2 --> NO3)
+		- KNo       = max rate of Nitrox ([N]/s)
+		- KNO2No    = half-sat for no2 loss via nitrox ([N]/s)
+		- KO2No     = half-sat for o2 loss via nitrox ([O2]/s)
+
+		!!! Denitrif1 !!! (NO3 --> NO2)
+		- KDen1     = max rate of denitrif1 (1/s)
+		- KO2Den1   = O2 poisoning for denitrif1 ([O2])
+		- KNO3Den1  = half-sat for no3 loss via denitrif1 ([NO3]/s)
+
+		!!! Denitrif2 !!! (NO2 --> N20)
+		- KDen2     = max rate of denitrif2 (1/s)
+		- KO2Den2   = O2 poisoning for denitrif2 ([O2])
+		- KNO2Den2  = half-sat for no2 loss via denitrif2 ([NO3]/s)
+			- should this be in [NO2]/s?
+
+		!!! Denitrif3 !!! (N2O --> N2)
+		- KDen3     = max rate of denitrif3 (1/s)
+		- KO2Den3   = O2 poisoning for denitrif3 ([O2])
+		- KN2ODen3  = half-sat for no3 loss via denitrif3 ([NO3]/s)
+			- should this be in [N2O]/s?
+		
+		!!! Anammox !!! (NH4 + NO2 --> N2)
+		- KAx       = max ammox rate ([N]/s)
+		- KNH4Ax    = half-sat for nh4 loss via anammox ([NH4]/s)
+		- KNO2Ax    = half-sat for no2 loss via anammox ([NO2]/s)
+		- KO2Ax     = not sure....
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		
+	- Can toggle restoring terms (currently off)
+	
+	- Sets Z-dependent restoring timescale (tauZvar)
+	- This is turned on, so a depth-varying forcing file is required
+	- This gets utilized in bgc1d_initialize_DepParam.m
+	- If turned off, you can set a constant 'restoring timescale' for:
+		- Horizontal diffusion (Kh) in m2/s
+		- Horizontal advection (Uh) in m/s
+
+	- Sets physical scalings
+	- Rh is a unitless scaling for sensitivity analysis? (currently set to 1)
+	- Lh is a horizontal scale in m, currently set to 4e6 m (4000 km)	
+	
+	- Can force anoxia over a specific depth range using 'forceanoxic'
+	- This is currently off (=0), but if on will restore 0 oxygen over a depth layer
+	- Apparently this prevents O2 intrusion in the OMZ while allowing restoring
+	  to other tracer terms.
+
+	- Calculates dependent variables based on input parameters
+		- Calls bgc1d_initialize_DepParam
+
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		bgic1d_initialize_DepParam
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		- Loads restart file, saves as bgc.rst
+			- Depth profiles of the 8 tracers
+		- Sets zgrid based on 'top', 'bot', and number of z points
+		- Sets zgridpoc, which is +1 compared to zgrid (boundary of cells)
+		
+		- Calculates vertical sinking of POC based on Martin curve exponent
+			- S&G pg 219-222
+		- Calculates stoichiometry based on input organic molecule
+			- Calls get_stoichiometry
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			get_stoichiometry
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			- Calculates the stoichiometry of various redox reactions
+			  given the composition of organic matter set in
+			  bgc1d_initbgc_params
+			- i.e. a,b,c,d = 106:175:42:16
+			- so our OM molecule would be: C_a H_b O_c N_d P
+			- 
+			
+			- Number of electrons required for oxidation of OM:
+				(C_a)(H_b)(O_c)(N_d)(P) --> CO2 + NH3 + H2O + H3PO4
+				would yield...
+				Corg_e = 4*a + b - 2*c - 3*d + 5 = 472 electrons
+				C = 4+
+				H = 1+
+				O = 2-
+				N = 3-
+				P = 5+
+			- O2toH2O_e    = O2   --> H2O  = 4 electrons
+				- (O2) + (4H+) + (4e-)  --> 2H2O 
+			- HNO3toHNO2_e = HNO3 --> HNO2 = 2 electrons
+				- (2NO3-) + (2H+) + (2e-) --> (2NO2-) + (H2O)
+			- HNO2toN2O_e  = HNO2 --> N2O  = 2 electrons
+				- (2HNO2) + (2H+) + (2e-) --> (N2O) + (2H2O) 
+			- N2OtoN2_e    = N2O  --> N2   = 2 electrons
+				- (N2O) + (2H+) + (2e-) --> (N2) + (H2O)
+
+			- Oxygen to Carbon remineralization ratio (molO2 / molC)
+				- OCrem = (Corg_e / O2toH2O_e)
+			- Ammonium to Carbon remineralization ratio (molNH4 / molC)
+				- NCrem = (d / a)
+			- Phosphate to Carbon denitrification ratio (molNO3 / molC)
+				- PCrem = (1 / a)
+			- Nitrate to Carbon ratio during nitrate reduction (molNO3 / molC)
+				- NCden1 = ((Corg_e / HNO3toHNO2_e) / a)
+			- Nitrite to Carbon ratio during nitrite reduction (molNO2 / molC)
+				- NCden2 = ((Corg_e / HNO2toN2O_e) / a)
+			- Nitrous oxide to Carbon ratio during N2O reduction (molN2O / molC)
+				- NCden3 = ((Corg_e / N2OtoN2_e) / a)
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			
+		- Can toggle restoring function to tracers (currently off)
+			- Calls bgc1d_restoring_initialize
+			
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			bgc1d_restoring_initialize
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			- Essentially fits profiles of tracers to the zgrid, smoothes using spline
+			- No restoring actually takes place yet	
+	
+		- Applies vertical diffusion parameters to set diffusion profile
+			- Kv_width defines sharpness of gradient between top/bot
+				- more width = less sharpness
+			- Kv_flex defines level at which sharp gradient begins 
+
+		- Applies upwelling parameters to set upwelling/vertical velocity profile
+			- Currently constant throughout water column, in m/s
+
+		- Next applies advection/diffusion module
+			- Calls bgc1d_advection_diff_opt
+			
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			bgc1d_advection_diff_opt
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			- Advects, diffuses tracers and applies BGC s-m-s
+			- If toggled, also applies restoring fluxes
+			- Initializes 3D matrix for each component of the solution
+				- sol, advection, diffusion, sms, restoring
+			- Begins from restart profiles for each tracer
+			- Applies initial sources-minus-sinks from restart
+				-Calls bgc1d_sourcesink
+
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				bgc1d_sourcesink
+				%%%%%%%%%%%%%%%%%%%%%%%%%%%
+				- Takes tracers from bgc1d_advection_diff_opt along with
+				  max rates/half-saturation constants from bgc1d_initbgc_params
+				  and calculates source-sink rates based on tracer.
+				- Also calculates specific production/consumption terms for N2O, NO2
+
+			- Initializes POC sinking flux at top of profile
+			- Updates POC by mass conservation; remineralization = divergence of flux
+				- S&G pg 222
+				- Establishes POC(z) profile
+
+			- Starts time-stepping by first apply advection/diffusion over time-interval
+				- Forward-time centered-space finite difference method
+				- Applies 1D advection/diffusion (only in vertical)
+			  	  using vertical velocity and diffusion profiles for each tracer
+				- See guide under Nitrogen folder (it works!)
+
+			- Next applies sources-minus-sinks over time-step
+				- Calls bgc1d_sourcesink
+			- Also recalculates POC profile using new sms.kpoc
+			
+			- Saves output (also from each component) and restarts time-step
+	%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+

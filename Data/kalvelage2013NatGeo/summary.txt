@@ -1,0 +1,18 @@
+/* DATA DESCRIPTION:
+Citation:	Kalvelage, Tim; Lavik, Gaute; Lam, Phyllis; Contreras, Sergio; Arteaga, Lionel; Löscher, Carolin R; Oschlies, Andreas; Paulmier, Aurelien; Stramma, Lothar; Kuypers, Marcel MM (2015): Nitrogen cycling driven by organic matter export in the South Pacific oxygen minimum zone. PANGAEA, https://doi.org/10.1594/PANGAEA.843461, 
+	Supplement to: Kalvelage, Tim; Lavik, Gaute; Lam, Phyllis; Contreras, Sergio; Arteaga, Lionel; Löscher, Carolin R; Oschlies, Andreas; Stramma, Lothar; Kuypers, Marcel MM (2013): Nitrogen cycling driven by organic matter export in the South Pacific oxygen minimum zone. Nature Geoscience, 6(3), 228-234, https://doi.org/10.1038/ngeo1739
+Abstract:	Oxygen minimum zones are expanding globally, and at present account for around 20-40% of oceanic nitrogen loss. Heterotrophic denitrification and anammox-anaerobic ammonium oxidation with nitrite-are responsible for most nitrogen loss in these low-oxygen waters. Anammox is particularly significant in the eastern tropical South Pacific, one of the largest oxygen minimum zones globally. However, the factors that regulate anammox-driven nitrogen loss have remained unclear. Here, we present a comprehensive nitrogen budget for the eastern tropical South Pacific oxygen minimum zone, using measurements of nutrient concentrations, experimentally determined rates of nitrogen transformation and a numerical model of export production. Anammox was the dominant mode of nitrogen loss at the time of sampling. Rates of anammox, and related nitrogen transformations, were greatest in the productive shelf waters, and tailed off with distance from the coast. Within the shelf region, anammox activity peaked in both upper and bottom waters. Overall, rates of nitrogen transformation, including anammox, were strongly correlated with the export of organic matter. We suggest that the sinking of organic matter, and thus the release of ammonium into the water column, together with benthic ammonium release, fuel nitrogen loss from oxygen minimum zones.
+Project(s):	Climate - Biogeochemistry Interactions in the Tropical Ocean (SFB754) (URI: http://www.sfb754.de)
+Coverage:	MEDIAN LATITUDE: -12.016536 * MEDIAN LONGITUDE: -80.127629 * SOUTH-BOUND LATITUDE: -18.000000 * WEST-BOUND LONGITUDE: -85.833333 * NORTH-BOUND LATITUDE: -3.580000 * EAST-BOUND LONGITUDE: -71.903500
+	DATE/TIME START: 2008-12-28T09:28:00 * DATE/TIME END: 2009-02-09T20:42:00
+License:	Creative Commons Attribution 3.0 Unported (CC-BY-3.0)
+Size:	6 datasets
+*/
+/* TABULAR SUMMARY OF DATASETS LISTED IN THIS COLLECTION: */
+Filename	Citation of child dataset
+M77_3_hy.tab	Kalvelage, Tim; Krahmann, Gerd; Tanhua, Toste (2012): Hydrochemistry during METEOR cruise M77/3. https://doi.org/10.1594/PANGAEA.793154
+M77_4_nh4.tab	Kalvelage, Tim (2015): Ammonium measured from water samples during METEOR cruise M77/4. https://doi.org/10.1594/PANGAEA.843450
+M77_3_n-cycle.tab	Kalvelage, Tim (2015): N-cycling from water samples during METEOR cruise M77/3. https://doi.org/10.1594/PANGAEA.843459
+M77_4_n-cycle.tab	Kalvelage, Tim (2015): N-cycling from water samples during METEOR cruise M77/4. https://doi.org/10.1594/PANGAEA.843460
+M77_3_poc-pon.tab	Kalvelage, Tim (2015): Particulate organic carbon and nitrogen from pump-CTD during METEOR cruise M77/3. https://doi.org/10.1594/PANGAEA.843414
+M77_4_poc-pon.tab	Kalvelage, Tim (2015): Particulate organic carbon and nitrogen from water samples during METEOR cruise M77/4. https://doi.org/10.1594/PANGAEA.843428

@@ -1,0 +1,69 @@
+/* DATA DESCRIPTION:
+Citation:	Kalvelage, Tim (2015): N-cycling from water samples during METEOR cruise M77/4. PANGAEA, https://doi.org/10.1594/PANGAEA.843460, 
+	In supplement to: Kalvelage, Tim; Lavik, Gaute; Lam, Phyllis; Contreras, Sergio; Arteaga, Lionel; Löscher, Carolin R; Oschlies, Andreas; Stramma, Lothar; Kuypers, Marcel MM (2013): Nitrogen cycling driven by organic matter export in the South Pacific oxygen minimum zone. Nature Geoscience, 6(3), 228-234, https://doi.org/10.1038/ngeo1739
+Project(s):	Climate - Biogeochemistry Interactions in the Tropical Ocean (SFB754) (URI: http://www.sfb754.de)
+Coverage:	MEDIAN LATITUDE: -8.166667 * MEDIAN LONGITUDE: -83.882357 * SOUTH-BOUND LATITUDE: -14.000000 * WEST-BOUND LONGITUDE: -85.833333 * NORTH-BOUND LATITUDE: -3.583333 * EAST-BOUND LONGITUDE: -80.998833
+	DATE/TIME START: 2009-01-30T01:00:00 * DATE/TIME END: 2009-02-09T20:42:00
+	MINIMUM DEPTH, water: 41 m * MAXIMUM DEPTH, water: 525 m
+Event(s):	M77/4-CTD10 * LATITUDE: -14.000000 * LONGITUDE: -80.998833 * DATE/TIME: 2009-01-30T01:00:00 * ELEVATION: -4813.0 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO) * COMMENT: W2
+	M77/4-CTD18 * LATITUDE: -14.000000 * LONGITUDE: -85.833333 * DATE/TIME: 2009-01-31T20:45:00 * ELEVATION: -4583.8 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO) * COMMENT: W2
+	M77/4-CTD27 * LATITUDE: -10.000000 * LONGITUDE: -85.833333 * DATE/TIME: 2009-02-02T08:33:00 * ELEVATION: -4407.4 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO) * COMMENT: W2
+	M77/4-CTD36 * LATITUDE: -3.583333 * LONGITUDE: -85.833333 * DATE/TIME: 2009-02-04T15:24:00 * ELEVATION: -3265.6 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO)
+	M77/4-CTD47 * LATITUDE: -3.583333 * LONGITUDE: -81.344000 * DATE/TIME: 2009-02-06T16:22:00 * ELEVATION: -1216.2 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO)
+	M77/4-CTD51 * LATITUDE: -6.000000 * LONGITUDE: -81.500500 * DATE/TIME: 2009-02-07T17:43:00 * ELEVATION: -2425.9 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO) * COMMENT: W2
+	M77/4-CTD64 * LATITUDE: -6.000000 * LONGITUDE: -85.833167 * DATE/TIME: 2009-02-09T20:42:00 * ELEVATION: -4109.7 m * CAMPAIGN: M77/4 (URI: https://doi.org/10.2312/cr_m77) * BASIS: Meteor (1986) (URI: https://de.wikipedia.org/wiki/Meteor_(Schiff,_1986)) * METHOD/DEVICE: CTD/Rosette (CTD-RO) * COMMENT: W2
+Parameter(s):	Event label (Event)
+	Date/Time of event (Date/Time)
+	Latitude of event (Latitude)
+	Longitude of event (Longitude)
+	DEPTH, water [m] (Depth water) * GEOCODE
+	Sample code/label (Sample label) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Ammonium, oxidation rate [nmol/l/day] ([NH4]+ OR) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: Ammonium oxidation
+	Nitrite, oxidation rate [nmol/l/day] ([NO2]- OR) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: Nitrite oxidation
+	Nitrate, reduction rate [nmol/l/day] ([NO3]- RR) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: Nitrate reduction
+	Anammox rate [nmol/l/day] (Anammox rate) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: Anammox
+	Dissimilatory nitrate reduction to ammonium [nmol/l/day] (DNRA) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: DNRA
+	Denitrification [nmol/l/day] (Denitrifi) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: coupled to H2S oxidation
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: Denitrification H2S
+	Denitrification [nmol/l/day] (Denitrifi) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca)
+	Standard deviation [±] (Std dev) * PI: Kalvelage, Tim (Tim.Kalvelage@Dal.Ca) * COMMENT: Denitrification
+License:	Creative Commons Attribution 3.0 Unported (CC-BY-3.0)
+Size:	465 data points
+*/
+Event	Date/Time	Latitude	Longitude	Depth water [m]	Sample label	[NH4]+ OR [nmol/l/day]	Std dev [±] (Ammonium oxidation)	[NO2]- OR [nmol/l/day]	Std dev [±] (Nitrite oxidation)	[NO3]- RR [nmol/l/day]	Std dev [±] (Nitrate reduction)	Anammox rate [nmol/l/day]	Std dev [±] (Anammox)	DNRA [nmol/l/day]	Std dev [±] (DNRA)	Denitrifi [nmol/l/day] (coupled to H2S oxidation)	Std dev [±] (Denitrification H2S)	Denitrifi [nmol/l/day]	Std dev [±] (Denitrification)
+M77/4-CTD10	2009-01-30T01:00	-14.0000	-80.9988	150	84	2.05	0.07	25.50	2.99	22.64	2.32	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD10	2009-01-30T01:00	-14.0000	-80.9988	200	84	0.00	0.00	25.57	3.10	38.87	11.06	5.37	1.09	0.00	0.00	0	0.00	1.85	0.43
+M77/4-CTD10	2009-01-30T01:00	-14.0000	-80.9988	299	84	0.00	0.00	0.00	0.00	43.38	6.45	1.62	0.19	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD10	2009-01-30T01:00	-14.0000	-80.9988	371	84	0.00	0.00	0.00	0.00	12.07	0.68	3.06	0.28	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD10	2009-01-30T01:00	-14.0000	-80.9988	445	84	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD18	2009-01-31T20:45	-14.0000	-85.8333	160	93	0.00	0.00	0.00	0.00	11.32	1.01	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD18	2009-01-31T20:45	-14.0000	-85.8333	170	93	0.00	0.00	0.00	0.00	24.96	3.03	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD18	2009-01-31T20:45	-14.0000	-85.8333	200	93	0.00	0.00	0.00	0.00	29.89	3.05	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD18	2009-01-31T20:45	-14.0000	-85.8333	300	93	0.00	0.00	0.00	0.00	15.83	1.26	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD18	2009-01-31T20:45	-14.0000	-85.8333	375	93	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD27	2009-02-02T08:33	-10.0000	-85.8333	125	101	0.00	0.00	0.00	0.00	12.90	2.75	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD27	2009-02-02T08:33	-10.0000	-85.8333	200	101	0.00	0.00	0.00	0.00	7.64	0.44	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD27	2009-02-02T08:33	-10.0000	-85.8333	300	101	0.00	0.00	0.00	0.00	9.37	0.34	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD27	2009-02-02T08:33	-10.0000	-85.8333	400	101	0.00	0.00	17.44	1.27	12.13	1.43	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD27	2009-02-02T08:33	-10.0000	-85.8333	525	101	0.00	0.00	0.00	0.00	4.07	0.46	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD36	2009-02-04T15:24	-3.5833	-85.8333	200	109	0.00	0.00	14.94	5.67	8.28	1.18	2.08	0.57	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD36	2009-02-04T15:24	-3.5833	-85.8333	218	109	0.00	0.00	0.00	0.00	9.51	3.64	1.80	0.21	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD36	2009-02-04T15:24	-3.5833	-85.8333	299	109	0.00	0.00	5.92	1.55	27.66	3.75	1.91	0.43	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD36	2009-02-04T15:24	-3.5833	-85.8333	398	109	0.00	0.00	0.00	0.00	17.70	1.74	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD47	2009-02-06T16:22	-3.5833	-81.3440	227	119	7.46	0.26	27.89	0.82	28.72	2.16	3.40	0.87	1.14	0.29	0	0.00	0.00	0.00
+M77/4-CTD47	2009-02-06T16:22	-3.5833	-81.3440	346	119	0.00	0.00	12.56	1.59	15.49	1.06	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD47	2009-02-06T16:22	-3.5833	-81.3440	498	119	0.00	0.00	6.02	0.59	11.94	0.60	5.87	1.56	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD51	2009-02-07T17:43	-6.0000	-81.5005	41	123	70.10	2.20	33.42	7.92	59.44	19.12	18.05	0.66	1.30	0.19	0	0.00	0.00	0.00
+M77/4-CTD51	2009-02-07T17:43	-6.0000	-81.5005	199	123	0.00	0.00	20.13	7.37	8.17	0.39	4.43	0.69	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD51	2009-02-07T17:43	-6.0000	-81.5005	299	123	0.00	0.00	0.00	0.00	54.34	5.37	6.68	1.11	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD51	2009-02-07T17:43	-6.0000	-81.5005	432	123	0.00	0.00	0.00	0.00	6.77	1.78	1.08	0.15	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD64	2009-02-09T20:42	-6.0000	-85.8332	74	134	0.00	0.00	14.07	0.89	6.71	0.42	2.20	0.63	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD64	2009-02-09T20:42	-6.0000	-85.8332	200	134	0.00	0.00	0.00	0.00	3.26	0.28	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD64	2009-02-09T20:42	-6.0000	-85.8332	258	134	0.00	0.00	17.40	1.11	8.71	0.41	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD64	2009-02-09T20:42	-6.0000	-85.8332	360	134	0.00	0.00	12.37	2.52	29.19	1.90	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
+M77/4-CTD64	2009-02-09T20:42	-6.0000	-85.8332	466	134	0.00	0.00	0.00	0.00	8.70	0.99	0.00	0.00	0.00	0.00	0	0.00	0.00	0.00
