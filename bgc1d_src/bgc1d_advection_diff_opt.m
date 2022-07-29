@@ -26,7 +26,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
  n2o = zeros(2,bgc.nz);
  n2  = zeros(2,bgc.nz);
  po4 = zeros(2,bgc.nz);
- mytrc = zeros(2,bgc.nz);
+ het = zeros(2,bgc.nz);
  
  fpoc_out = zeros(2,bgc.nz+1);
 
@@ -48,7 +48,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     nh4(1,:) = bgc.rst(6,:);
     no2(1,:) = bgc.rst(7,:);
     n2(1,:)  = bgc.rst(8,:);  
-    mytrc(1,:)  = bgc.rst(8,:) * 0.0 + 0.1 ;  % make my tracer equal to 0.1 everywhere
+    het(1,:)  = bgc.rst(8,:) * 0.0 + 0.1 ;  % make my tracer equal to 0.1 everywhere
     if bgc.RunIsotopes
        i15no3(1,:)  = bgc.rst(9,:);
        i15no2(1,:)  = bgc.rst(10,:);
@@ -65,7 +65,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     n2o(1,:) = linspace(bgc.n2o_top,bgc.n2o_bot,bgc.npt+1);
     n2(1,:)  = linspace(bgc.n2_top,bgc.n2_bot,bgc.npt+1);
     po4(1,:) = linspace(bgc.po4_top,bgc.po4_bot,bgc.npt+1);
-    mytrc(1,:) = linspace(bgc.mytrc_top,bgc.mytrc_bot,bgc.npt+1);
+    het(1,:) = linspace(bgc.het_top,bgc.het_bot,bgc.npt+1);
     if bgc.RunIsotopes
        i15no3(1,:)  = linspace(bgc.i15no3_top,bgc.i15no3_bot,bgc.npt+1);
        i15no2(1,:)  = 10^-23*0.0037;%linspace(bgc.i15no2_top,bgc.i15no2_bot,bgc.npt+1);
@@ -84,7 +84,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
  tr.nh4 = nh4(1,:);
  tr.no2 = no2(1,:);
  tr.n2  = n2(1,:);
- tr.mytrc  = mytrc(1,:);
+ tr.het  = het(1,:);
  if bgc.RunIsotopes
     tr.i15no3  = i15no3(1,:);
     tr.i15no2  = i15no2(1,:);
@@ -141,7 +141,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     n2o(2,1) = bgc.n2o_top;
     n2(2,1)  = bgc.n2_top;
     po4(2,1) = bgc.po4_top;
-    mytrc(2,1) = bgc.mytrc_top;
+    het(2,1) = bgc.het_top;
     %%%% Bottom boundary conditions
     o2(2,end)  = bgc.o2_bot;
     no3(2,end) = bgc.no3_bot;
@@ -150,7 +150,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     n2o(2,end) = bgc.n2o_bot;
     n2(2,end)  = bgc.n2_bot;
     po4(2,end) = bgc.po4_bot;
-    mytrc(2,end) = bgc.mytrc_bot;
+    het(2,end) = bgc.het_bot;
     if bgc.RunIsotopes
        %%%% Top boundary conditions
        i15no3(2,1)  = bgc.i15no3_top;
@@ -190,7 +190,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     nh4(2,2:end-1) = nh4(1,2:end-1) .* coeff1 + nh4(1,3:end) .* coeff2 + nh4(1,1:end-2) .* coeff3;
     no2(2,2:end-1) = no2(1,2:end-1) .* coeff1 + no2(1,3:end) .* coeff2 + no2(1,1:end-2) .* coeff3;
     n2(2,2:end-1)  = n2(1,2:end-1)  .* coeff1 + n2(1,3:end)  .* coeff2 + n2(1,1:end-2)  .* coeff3;
-    mytrc(2,2:end-1)  = mytrc(1,2:end-1)  .* coeff1 + mytrc(1,3:end)  .* coeff2 + mytrc(1,1:end-2)  .* coeff3;
+    het(2,2:end-1) = het(1,2:end-1) .* coeff1 + het(1,3:end) .* coeff2 + het(1,1:end-2) .* coeff3;
     if bgc.RunIsotopes
        i15no3(2,2:end-1)  = i15no3(1,2:end-1)  .* coeff1 + i15no3(1,3:end)  .* coeff2 + i15no3(1,1:end-2)  .* coeff3;
        i15no2(2,2:end-1)  = i15no2(1,2:end-1)  .* coeff1 + i15no2(1,3:end)  .* coeff2 + i15no2(1,1:end-2)  .* coeff3;
@@ -209,7 +209,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     tr.nh4 = nh4(1,:);
     tr.no2 = no2(1,:);
     tr.n2  = n2(1,:);
-    tr.mytrc  = mytrc(1,:);
+    tr.het  = het(1,:);
     if bgc.RunIsotopes
        tr.i15no3  = i15no3(1,:);
        tr.i15no2  = i15no2(1,:);
@@ -243,7 +243,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     n2o(2,2:end-1) = n2o(2,2:end-1) + sms.n2o(2:end-1) * dt;
     n2(2,2:end-1)  = n2(2,2:end-1)  + sms.n2(2:end-1)  * dt;
     po4(2,2:end-1) = po4(2,2:end-1) + sms.po4(2:end-1) * dt;
-    mytrc(2,2:end-1) = mytrc(2,2:end-1) + sms.mytrc(2:end-1) * dt;
+    het(2,2:end-1) = het(2,2:end-1) + sms.het(2:end-1) * dt;
     if bgc.RunIsotopes
        i15no3(2,2:end-1)  = i15no3(2,2:end-1)  + sms.i15no3(2:end-1)  * dt;
        i15no2(2,2:end-1)  = i15no2(2,2:end-1)  + sms.i15no2(2:end-1)  * dt;
@@ -262,7 +262,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
        n2o(2,2:end-1) = n2o(2,2:end-1) + restoring.n2o(2:end-1) * dt;
        n2(2,2:end-1)  = n2(2,2:end-1)  + restoring.n2(2:end-1)  * dt;
        po4(2,2:end-1) = po4(2,2:end-1) + restoring.po4(2:end-1) * dt;
-       mytrc(2,2:end-1) = mytrc(2,2:end-1) + restoring.mytrc(2:end-1) * dt;    
+       het(2,2:end-1) = het(2,2:end-1) + restoring.het(2:end-1) * dt;    
        if bgc.RunIsotopes
           i15no3(2,2:end-1)  = i15no3(2,2:end-1)  + restoring.i15no3(2:end-1)  * dt;
           i15no2(2,2:end-1)  = i15no2(2,2:end-1)  + restoring.i15no2(2:end-1)  * dt;
@@ -285,7 +285,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     n2(1,:)  = n2(2,:);
     po4(1,:) = po4(2,:);
     poc(1,:) = poc(2,:);  
-    mytrc(1,:) = mytrc(2,:);  
+    het(1,:) = het(2,:);  
     if bgc.RunIsotopes
        i15no3(1,:)  = i15no3(2,:);
        i15no2(1,:)  = i15no2(2,:);
@@ -312,7 +312,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
        sol(iout,6,:) = nh4(1,:);
        sol(iout,7,:) = no2(1,:);
        sol(iout,8,:) = n2(1,:);
-       sol(iout,9,:) = mytrc(1,:);
+       sol(iout,9,:) = het(1,:);
        if bgc.RunIsotopes
           sol(iout,10,:)  = i15no3(1,:);
           sol(iout,11,:) = i15no2(1,:);
@@ -332,7 +332,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
           sadv(iout,6,2:end-1) = alpha .* (nh4(1,3:end) - nh4(1,1:end-2)) + beta .* nh4(1,2:end-1);
           sadv(iout,7,2:end-1) = alpha .* (no2(1,3:end) - no2(1,1:end-2)) + beta .* no2(1,2:end-1);
           sadv(iout,8,2:end-1) = alpha .* (n2(1,3:end)  - n2(1,1:end-2))  + beta .* n2(1,2:end-1);
-          sadv(iout,9,2:end-1) = alpha .* (mytrc(1,3:end)  - mytrc(1,1:end-2))  + beta .* mytrc(1,2:end-1);
+          sadv(iout,9,2:end-1) = alpha .* (het(1,3:end)  - het(1,1:end-2))  + beta .* het(1,2:end-1);
           if bgc.RunIsotopes
              sadv(iout,10,2:end-1)  = alpha .* (i15no3(1,3:end)  - i15no3(1,1:end-2))  + beta .* i15no3(1,2:end-1);
              sadv(iout,11,2:end-1) = alpha .* (i15no2(1,3:end)  - i15no2(1,1:end-2))  + beta .* i15no2(1,2:end-1);
@@ -349,7 +349,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
           sdiff(iout,6,2:end-1) = gamma .* (nh4(1,3:end) - 2 * nh4(1,2:end-1) + nh4(1,1:end-2));
           sdiff(iout,7,2:end-1) = gamma .* (no2(1,3:end) - 2 * no2(1,2:end-1) + no2(1,1:end-2));
           sdiff(iout,8,2:end-1) = gamma .* (n2(1,3:end)  - 2 * n2(1,2:end-1)  + n2(1,1:end-2));
-          sdiff(iout,9,2:end-1) = gamma .* (mytrc(1,3:end)  - 2 * mytrc(1,2:end-1)  + mytrc(1,1:end-2));
+          sdiff(iout,9,2:end-1) = gamma .* (het(1,3:end)  - 2 * het(1,2:end-1)  + het(1,1:end-2));
           if bgc.RunIsotopes
              sdiff(iout,10,2:end-1)  = gamma .* (i15no3(1,3:end)  - 2 * i15no3(1,2:end-1)  + i15no3(1,1:end-2));
              sdiff(iout,11,2:end-1) = gamma .* (i15nh4(1,3:end)  - 2 * i15nh4(1,2:end-1)  + i15nh4(1,1:end-2));
@@ -366,7 +366,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
           ssms(iout,6,2:end-1) = sms.nh4(2:end-1);
           ssms(iout,7,2:end-1) = sms.no2(2:end-1);
           ssms(iout,8,2:end-1) = sms.n2(2:end-1);
-          ssms(iout,9,2:end-1) = sms.mytrc(2:end-1);
+          ssms(iout,9,2:end-1) = sms.het(2:end-1);
           if bgc.RunIsotopes
              ssms(iout,10,2:end-1)  = sms.i15no3(2:end-1);
              ssms(iout,11,2:end-1) = sms.i15no2(2:end-1);
@@ -383,7 +383,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
           srest(iout,6,2:end-1) = restoring.nh4(2:end-1);
           srest(iout,7,2:end-1) = restoring.no2(2:end-1);
           srest(iout,8,2:end-1) = restoring.n2(2:end-1);
-          srest(iout,9,2:end-1) = restoring.mytrc(2:end-1);
+          srest(iout,9,2:end-1) = restoring.het(2:end-1);
           if bgc.RunIsotopes
              srest(iout,10,2:end-1)  = restoring.i15no3(2:end-1);
              srest(iout,11,2:end-1) = restoring.i15no2(2:end-1);

@@ -18,29 +18,10 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
         tmp = max(epsn,tr.(tmpvar{indf}));
  	tr.(tmpvar{indf}) = tmp;
  end
-   
- d2s = 86400.0;
 
- % % % % % % % % % % % % % % % % %
- % % % % Uptake rates (p)  % % % %
- % % % % % % % % % % % % % % % % %
- 
- p_het_org = bgc.het_Vmax_org .* ( tr.poc ./ (tr.poc + bgc.het_Korg) );     % Uptake of organic matter
- p_het_oxy = bgc.het_po_coef .* tr.o2;                                      % Uptake of oxygen
-
- % % % % % % % % % % % % % % % % %
- % % % % Growth rates (u)  % % % %
- % % % % % % % % % % % % % % % % %
- 
- u_het = max(0.0, min((p_het_org .* bgc.het_y_org), (p_het_oxy .* bgc.het_y_oxy))) ./ d2s; 
- 
- % % % % % % % % % % % % % % %
- % % % % Mortality (m) % % % %
- % % % % % % % % % % % % % % %
- 
- min_bio = 1e-4;
- mort = 0.1 ./ d2s; 
-
+ % % % % % % % % % % % %
+ % % % % J-OXIC  % % % %
+ % % % % % % % % % % % %
  %!!! mm1 = Michaelis-Menton hyperbolic growth (var / var * k) where k is
  %!!! concentration of var where growth rate is half its maximum value
     %----------------------------------------------------------------------
@@ -48,7 +29,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
     %----------------------------------------------------------------------
     %!!! Respiration rate based on POC, modified by oxygen concentration
     RemOx = bgc.Krem .* mm1(tr.o2,bgc.KO2Rem) .* tr.poc;
-    
+
  if ~bgc.RunIsotopes 
     %----------------------------------------------------------------------
     % (2) Ammonium oxidation (molN-units, mmolN/m3/s):
@@ -164,9 +145,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  sms.n2o = (sms.n2oind.ammox + sms.n2oind.nden + sms.n2oind.den2 + sms.n2oind.den3);
  
  % PJB
- b_het = max(0.0, tr.het - min_bio); % set minimum biomass under which grazing cannot occur (i.e. dilution)
- sms.het = (tr.het .* u_het) - (mort .* b_het .* tr.het);
- % PJB
+ sms.het = tr.o2*0 + 1/(86400 * 365);   % years
 
  %---------------------------------------------------------------------- 
  % (9) Here adds diagnostics, to be handy when needed

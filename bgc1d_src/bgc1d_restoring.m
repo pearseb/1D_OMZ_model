@@ -56,6 +56,13 @@
     restoring.n2 = (bgc.restore.n2_cout-t.n2)./tauh;
  end
 
+ if bgc.HETrest==0
+    restoring.het = zeros(1,length(t.het));
+ else
+    cout = zeros(size(bgc.zgrid));
+    restoring.het = (bgc.restore.het_cout-t.het)./tauh;
+ end
+
  if bgc.RunIsotopes
  	if bgc.i15NO3rest==0
  	   restoring.i15no3 = zeros(1,length(t.i15no3));
@@ -91,11 +98,4 @@
  	   cout = zeros(size(bgc.zgrid));
  	   restoring.i15n2oB = (bgc.restore.i15n2ob_cout-t.i15n2oB)./tauh;
  	end 
- end
-
- if bgc.MYTRCrest==0
-    restoring.mytrc = zeros(1,length(t.mytrc));
- else
-    cout = zeros(size(bgc.zgrid));
-    restoring.mytrc = (bgc.restore.mytrc_cout-t.mytrc)./tauh;
  end

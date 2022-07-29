@@ -11,29 +11,7 @@
  bgc.stoch_b = 175.0;
  bgc.stoch_c = 42.0;
  bgc.stoch_d = 16.0;
- 
- %%%%%%% Facultative heterotroph %%%%%%%%
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- % Stoichiometry
- bgc.het_CN = 4.5;      % 4.5   % Carbon to Nitrogen ratio of heterotrophic biomass - White et al. 2019)
- bgc.het_HN = 7.0;      % 7.0   % Carbon to Hydrogen ratio of heterotrophic biomass
- bgc.het_ON = 2.0;      % 2.0   % Carbon to Oxygen ratio of heterotrophic biomass
- % Cell structure and quotas
- bgc.het_vol = 0.05;    % 0.05  % Volume of heterotrophic bacterial cell (um3) - Giovannoni 2017
- bgc.het_diam = effective_diam(bgc.het_vol); % effective diameter of a heterotrophic bacterial cell (um)
- bgc.het_gCcell = gC_per_cell(bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc.het_vol); % grams of carbon per cell (g/cell)
- bgc.het_molCum3 = molC_per_um3(bgc.het_gCcell, bgc.het_vol); % mols of C per volume unit (mol C / um3)
- % Maximum diffusive uptake of oxygen
- bgc.het_po_coef = po_coef(bgc.het_diam, bgc.het_molCum3, bgc.het_CN); % diffusive oxygen coefficient for growth on O2 - Zakem & Follows 2017
- % Yields
- bgc.het_y_org = yield_from_stoich(bgc.het_CN, bgc.stoch_a./bgc.stoch_d);    % Estimate the yield of heterotrophic bacteria - Sinsabaugh et al. 2013
- bgc.het_y_org = bgc.het_y_org ./ bgc.het_CN .* (bgc.stoch_a./bgc.stoch_d);   % Convert yield to units of nitrogen (mol bioN / mol orgN)
- bgc.het_y_oxy = substrate_yield(bgc.het_y_org, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 4.0); % yield of biomass per unit oxygen reduced
- % kinetics
- bgc.het_mumax = 0.5;   % 0.5   % Max. specific doubling rate of facultative heterotrophs (SAR11 bacteria) (/day) - Rappe et al. 2002; Kirkman et al. 2016
- bgc.het_Vmax_org = bgc.het_mumax ./ bgc.het_y_org;
- bgc.het_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
- 
+
  %%%%%%% Ammonification %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  bgc.Krem = 0.08/d2s ;              % 0.08    % Max. specific remineralization rate (1/s)

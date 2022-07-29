@@ -31,15 +31,14 @@
  bgc.zbottom = -1330; % bottom depth (m)
 
  %%%%% Time step / history %%%%%%
- iTstep = 1;
+ iTstep = 2;
  switch iTstep
  case 1
     % Original formulation - SYang
     % Specifies # timesteps, length and hist in timesteps 
-    years = 100; 
+    nt = 365 .* 86400;% Simulation length in timesteps
     dt = 86400 ./ 24.0; % timestep in seconds bgc.hist =  500; 
-    nt = years .* ((365 .* 86400) ./ dt);% Simulation length in timesteps
-    hist = 365 .* 86400 ./ dt; % save a snapshot every year
+    hist = 365*10; % save a snapshot every X timesteps
     endTimey = nt*dt/(365*86400); % end time of simulation (years)
     histTimey = hist*dt/(365*86400); % history timestep (years)
    % Creates dt and history vectors
