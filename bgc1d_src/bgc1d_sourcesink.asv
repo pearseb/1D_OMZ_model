@@ -62,23 +62,37 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % % % % % % % % % % % % % % % % %
  
  u_facnar = zeros(1,bgc.nz);
+ facnar_y_org = zeros(1,bgc.nz);
+ facnar_aerob = zeros(1,bgc.nz);
+ 
  u_facnir = zeros(1,bgc.nz);
-
+ facnir_y_org = zeros(1,bgc.nz);
+ facnir_aerob = zeros(1,bgc.nz);
+ 
  for zz = 1:bgc.nz
+     % Faculative NAR heterotroph
      if u_facnar_aer(zz) >= u_facnar_ana(zz)
          u_facnar(zz) = u_facnar_aer(zz);
-         facnar_y_org = bgc.facnar_y_Oorg; 
-         facnar_y_ = bgc.facnar_y_Oorg; 
+         facnar_y_org(zz) = bgc.facnar_y_Oorg; 
+         facnar_aerob(zz) = 1.0;
      else
          u_facnar(zz) = u_facnar_ana(zz);
+         facnar_y_org(zz) = bgc.facnar_y_Norg; 
+         facnar_aerob(zz) = 0.0;
+     end
+     % Faculative NIR heterotroph
+     if u_facnir_aer(zz) >= u_facnir_ana(zz)
+         u_facnir(zz) = u_facnir_aer(zz);
+         facnir_y_org(zz) = bgc.facnir_y_Oorg; 
+         facnir_aerob(zz) = 1.0;
+     else
+         u_facnir(zz) = u_facnir_ana(zz);
+         facnir_y_org(zz) = bgc.facnir_y_Norg; 
+         facnir_aerob(zz) = 0.0;
      end
  end
-
-
- for xz = 1:bgc.nz
-     if u_facnar_aer(xz) >= u_facnar_ana(xz)
-
-
+ 
+ 
  % % % % % % % % % % % % % % %
  % % % % Mortality (m) % % % %
  % % % % % % % % % % % % % % %
@@ -224,10 +238,13 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % Substrate %
  % % % % % % %
 
- sms.o2  = -bgc.OCrem .* RemOx - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy) - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
- sms.nh4 =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4) - Anammox - (u_noo .* tr.noo);
+ sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .*facnar_aerob )...
+            - (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob)...
+            - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy) - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
+ sms.nh4 =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3)...
+     - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4) - Anammox - (u_noo .* tr.noo);
  sms.no2 =  (u_aoo .* tr.aoo .* (1./bgc.aoo_y_nh4 - 1)) + (bgc.NCden1 .* RemDen1) - (bgc.NCden2 .* RemDen2) - Anammox - (u_noo .* tr.noo ./ bgc.noo_y_no2);
- sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2) - (bgc.NCden1 .* RemDen1);
+ sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2) - (u_facnar .* tr.facnar ./ );
  
  %sms.poc = -(RemDen1 + RemDen2 + RemDen3) + ((mort .* b_het .* tr.het) - (tr.het .* u_het ./ bgc.het_y_org)) * bgc.het_CN;
  %sms.nh4 =  (tr.het .* u_het .* (1./bgc.het_y_org - 1)) + bgc.NCrem .* (RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;

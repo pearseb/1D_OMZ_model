@@ -59,7 +59,7 @@
 % modify the sinking profile. 
 
  if bgc.varsink == 1					
-    bgc.zpocref = bgc.zgrid(1)+bgc.dz/2	;
+    bgc.zpocref = bgc.zgrid(1)+bgc.dz/2;
     bgc.a = bgc.Krem / bgc.b;
     bgc.wsinkpoc =  bgc.a .* (-bgc.zgridpoc);
     bgc.wsink =  -bgc.a .* (bgc.zgrid);    

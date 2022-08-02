@@ -238,13 +238,21 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % Substrate %
  % % % % % % %
 
- sms.o2  = -bgc.OCrem .* RemOx - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy) - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
- sms.nh4 =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4) - Anammox - (u_noo .* tr.noo);
- sms.no2 =  (u_aoo .* tr.aoo .* (1./bgc.aoo_y_nh4 - 1)) + (bgc.NCden1 .* RemDen1) - (bgc.NCden2 .* RemDen2) - Anammox - (u_noo .* tr.noo ./ bgc.noo_y_no2);
- sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2) - (bgc.NCden1 .* RemDen1);
+ sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .*facnar_aerob )...
+            - (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob)...
+            - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy) - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
+ sms.nh4 =  bgc.NCrem .* RemDen3...
+            + (u_facnar .* tr.facnar .* (1./facnar_y_org - 1))...
+            + (u_facnir .* tr.facnir .* (1./facnir_y_org - 1))...
+            - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4) - Anammox - (u_noo .* tr.noo);
+ sms.no2 =  (u_aoo .* tr.aoo .* (1./bgc.aoo_y_nh4 - 1))...
+            + (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob))...
+            - (u_facnir .* tr.facnir ./ bgc.facnir_y_no2 .* (1 - facnir_aerob))...
+            - Anammox - (u_noo .* tr.noo ./ bgc.noo_y_no2);
+ sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2) - (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob));
  
  %sms.poc = -(RemDen1 + RemDen2 + RemDen3) + ((mort .* b_het .* tr.het) - (tr.het .* u_het ./ bgc.het_y_org)) * bgc.het_CN;
- %sms.nh4 =  (tr.het .* u_het .* (1./bgc.het_y_org - 1)) + bgc.NCrem .* (RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;
+ 
  % PJB
 
  %---------------------------------------------------------------------- 
