@@ -156,12 +156,12 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  %----------------------------------------------------------------------
  % (8)  Calculate SMS for each tracer (mmol/m3/s)
  %---------------------------------------------------------------------- 
- %sms.o2   =  -bgc.OCrem .* RemOx - 1.5.*Ammox - 0.5 .* Nitrox;
- %sms.no3  =  Nitrox - bgc.NCden1 .* RemDen1; % .* bgc.r14no3;
+ sms.o2   =  -bgc.OCrem .* RemOx - 1.5.*Ammox - 0.5 .* Nitrox;
+ sms.no3  =  Nitrox - bgc.NCden1 .* RemDen1; % .* bgc.r14no3;
  sms.poc  =  -(RemOx + RemDen1 + RemDen2 + RemDen3);
  sms.po4  =  bgc.PCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3);
- %sms.nh4  =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;
- %sms.no2  =  Jno2_hx + bgc.NCden1 .* RemDen1 - bgc.NCden2 .* RemDen2 - Anammox - Nitrox; % .* bgc.r14no2;
+ sms.nh4  =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;
+ sms.no2  =  Jno2_hx + bgc.NCden1 .* RemDen1 - bgc.NCden2 .* RemDen2 - Anammox - Nitrox; % .* bgc.r14no2;
  % N2 (mmol N2/m3/s, units of N2, not N)
  sms.n2   =  bgc.NCden3 .* RemDen3 + Anammox;
  sms.kpoc = -(KRemOx + KRemDen1 + KRemDen2 + KRemDen3);
@@ -189,7 +189,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  sms.o2  = -bgc.OCrem .* RemOx - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy) - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
  sms.nh4 =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4) - Anammox - (u_noo .* tr.noo);
  sms.no2 =  (u_aoo .* tr.aoo .* (1./bgc.aoo_y_nh4 - 1)) + (bgc.NCden1 .* RemDen1) - (bgc.NCden2 .* RemDen2) - Anammox - (u_noo .* tr.noo ./ bgc.noo_y_no2);
- sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2) - (bgc.NCden1 .* RemDen1);
+ sms.no3 =  Nitrox - bgc.NCden1 .* RemDen1; % .* bgc.r14no3;
  
  %sms.poc = -(RemDen1 + RemDen2 + RemDen3) + ((mort .* b_het .* tr.het) - (tr.het .* u_het ./ bgc.het_y_org)) * bgc.het_CN;
  %sms.nh4 =  (tr.het .* u_het .* (1./bgc.het_y_org - 1)) + bgc.NCrem .* (RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;
@@ -199,8 +199,8 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % (9) Here adds diagnostics, to be handy when needed
  %---------------------------------------------------------------------- 
  diag.RemOx   = RemOx;		% mmolC/m3/s
- diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		% mmolN/m3/s
- diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		% mmolN/m3/s
+ diag.Ammox   = Ammox;		% mmolN/m3/s
+ diag.Nitrox  = Nitrox;		% mmolN/m3/s
  diag.Anammox = Anammox;	% mmolN2/m3/s
  diag.RemDen1 = RemDen1;	% mmolC/m3/s
  diag.RemDen2 = RemDen2;	% mmolC/m3/s

@@ -94,6 +94,26 @@
     bgc.restore.het_cout = ppval(bgc.restore.het_cs,bgc.zgrid);
  end
 
+ if ~(bgc.AOOrest==0)
+    tdepth = -abs(Farfield.zgrid);
+    tconc  = Farfield.o2*0 + 0.1;
+    ibad = find(isnan(tconc));
+    tdepth(ibad) = [];
+    tconc(ibad) = [];
+    bgc.restore.aoo_cs = spline(tdepth,tconc);
+    bgc.restore.aoo_cout = ppval(bgc.restore.aoo_cs,bgc.zgrid);
+ end
+
+ if ~(bgc.NOOrest==0)
+    tdepth = -abs(Farfield.zgrid);
+    tconc  = Farfield.o2*0 + 0.1;
+    ibad = find(isnan(tconc));
+    tdepth(ibad) = [];
+    tconc(ibad) = [];
+    bgc.restore.noo_cs = spline(tdepth,tconc);
+    bgc.restore.noo_cout = ppval(bgc.restore.noo_cs,bgc.zgrid);
+ end
+
  if ~(bgc.i15NO3rest==0)
     tdepth = -abs(Farfield.zgrid);
     tconc  = Farfield.i15no3;

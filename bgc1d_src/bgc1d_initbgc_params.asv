@@ -102,7 +102,7 @@
  bgc.noo_y_oxy = 4 .* f_noo .* (1-f_noo) ./ d_noo;                      % yield of NOO for oxygen
  % kinetics
  bgc.noo_mumax = 1.0;                                   % 1.0   % Spieck et al. 2014; Kitzinger et al. 2020
- bgc.noo_Vmax_no2 = bgc.noo_mumax ./ bgc.noo_y_no2;
+ bgc.noo_Vmax_nh4 = bgc.noo_mumax ./ bgc.noo_y_no2;
  bgc.noo_Kno2  = 0.1;                                   % 0.1   % Reported from OMZ (Sun et al. 2017), oligotrophic conditions (Zhang et al. 2020), and Southern Ocean (Mdutyana et al. 2022)
 
  %%%%%%% Anammox bacteria %%%%%%%%
@@ -121,7 +121,7 @@
  bgc.aox_y_nh4 = 1/70;      % mol N biomass per mol NH4 (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
  bgc.aox_y_no2 = 1/81;      % mol N biomass per mol NO2 (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
  bgc.aox_e_no3 = 11;        % mol NO3 per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
- bgc.aox_e_n2 = 139;        % mol N (in N2) per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number 
+ bgc.aox_e_n2 = 139;        % mol N (in N2 per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number 
  % kinetics
  bgc.aox_mumax = 0.2;                                   % 0.2   % Okabe et al. 2021 ISME | Lotti et al. 2014
  bgc.aox_Vmax_nh4 = bgc.aox_mumax ./ bgc.aox_y_nh4;

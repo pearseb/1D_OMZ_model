@@ -63,6 +63,20 @@
     restoring.het = (bgc.restore.het_cout-t.het)./tauh;
  end
 
+ if bgc.AOOrest==0
+    restoring.aoo = zeros(1,length(t.aoo));
+ else
+    cout = zeros(size(bgc.zgrid));
+    restoring.aoo = (bgc.restore.aoo_cout-t.aoo)./tauh;
+ end
+
+ if bgc.NOOrest==0
+    restoring.noo = zeros(1,length(t.noo));
+ else
+    cout = zeros(size(bgc.zgrid));
+    restoring.noo = (bgc.restore.noo_cout-t.noo)./tauh;
+ end
+
  if bgc.RunIsotopes
  	if bgc.i15NO3rest==0
  	   restoring.i15no3 = zeros(1,length(t.i15no3));
