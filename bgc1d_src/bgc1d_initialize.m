@@ -88,7 +88,7 @@
 
  %%%% Prognostic variables %%%%%%
  bgc.RunIsotopes = false; % true -> run with isotopes
- bgc.tracers = {'o2', 'no3','poc', 'po4', 'n2o', 'nh4', 'no2', 'n2', 'het', 'aoo', 'noo'};
+ bgc.tracers = {'o2', 'no3','poc', 'po4', 'n2o', 'nh4', 'no2', 'n2', 'facnar', 'facnir','aoo', 'noo'};
  bgc.isotopes = {'i15no3', 'i15no2', 'i15nh4', 'i15n2oA', 'i15n2oB'};
  bgc.nvar_tr = length(bgc.tracers);
  bgc.nvar_is = length(bgc.isotopes);
@@ -155,7 +155,8 @@
  bgc.NH4rest = 0;
  bgc.N2rest  = 0;
  bgc.NO2rest = 0;
- bgc.HETrest = 0;
+ bgc.FACNARrest = 0;
+ bgc.FACNIRrest = 0;
  bgc.AOOrest = 0;
  bgc.NOOrest = 0;
  bgc.i15NO3rest  = 0;

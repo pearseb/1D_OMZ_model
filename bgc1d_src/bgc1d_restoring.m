@@ -56,11 +56,18 @@
     restoring.n2 = (bgc.restore.n2_cout-t.n2)./tauh;
  end
 
- if bgc.HETrest==0
-    restoring.het = zeros(1,length(t.het));
+ if bgc.FACNARrest==0
+    restoring.facnar = zeros(1,length(t.facnar));
  else
     cout = zeros(size(bgc.zgrid));
-    restoring.het = (bgc.restore.het_cout-t.het)./tauh;
+    restoring.facnar = (bgc.restore.facnar_cout-t.facnar)./tauh;
+ end
+
+ if bgc.FACNIRrest==0
+    restoring.facnir = zeros(1,length(t.facnir));
+ else
+    cout = zeros(size(bgc.zgrid));
+    restoring.facnir = (bgc.restore.facnir_cout-t.facnir)./tauh;
  end
 
  if bgc.AOOrest==0

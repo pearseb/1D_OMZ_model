@@ -56,6 +56,28 @@
  bgc.nir_Vmax_org = bgc.het_mumax .* den_penalty ./ bgc.nir_y_org;
  bgc.nir_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
  bgc.nir_Kno2  = 4.0;   % 4.0   % Half sat. constant for NO3 uptake  (Almeida et al. 1995)
+ 
+ %%%%%%% Facultative NAR heterotroph %%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ fac_penalty = 0.8; 
+ bgc.facnar_y_Oorg = bgc.het_y_org .* fac_penalty; 
+ bgc.facnar_y_oxy  = substrate_yield(bgc.facnar_y_Oorg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 4.0); % yield of biomass per unit oxygen reduced
+ bgc.facnar_y_Norg = bgc.nar_y_org .* fac_penalty;
+ bgc.facnar_y_no3  = substrate_yield(bgc.facnar_y_Norg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 2.0); % yield of biomass per unit nitrate reduced
+ bgc.facnar_Vmax_Oorg = bgc.het_mumax .* fac_penalty ./ bgc.facnar_y_Oorg; 
+ bgc.facnar_Vmax_Norg = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnar_y_Norg; 
+ bgc.facnar_Vmax_no3  = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnar_y_no3; 
+
+ %%%%%%% Facultative NIR heterotroph %%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ fac_penalty = 0.8; 
+ bgc.facnir_y_Oorg = bgc.het_y_org .* fac_penalty; 
+ bgc.facnir_y_oxy  = substrate_yield(bgc.facnir_y_Oorg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 4.0); % yield of biomass per unit oxygen reduced
+ bgc.facnir_y_Norg = bgc.nir_y_org .* fac_penalty;
+ bgc.facnir_y_no2  = substrate_yield(bgc.facnir_y_Norg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 3.0); % yield of biomass per unit nitrate reduced
+ bgc.facnir_Vmax_Oorg = bgc.het_mumax .* fac_penalty ./ bgc.facnir_y_Oorg; 
+ bgc.facnir_Vmax_Norg = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnir_y_Norg; 
+ bgc.facnir_Vmax_no2  = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnir_y_no2; 
 
  %%%%%%% Ammonia oxidising archaea %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 

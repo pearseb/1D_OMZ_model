@@ -56,6 +56,24 @@
  bgc.nir_Vmax_org = bgc.het_mumax .* den_penalty ./ bgc.nir_y_org;
  bgc.nir_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
  bgc.nir_Kno2  = 4.0;   % 4.0   % Half sat. constant for NO3 uptake  (Almeida et al. 1995)
+ 
+ %%%%%%% Facultative NAR heterotroph %%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ fac_penalty = 0.8; 
+ bgc.facnar_y_Oorg = bgc.het_y_org .* fac_penalty; 
+ bgc.facnar_y_oxy  = substrate_yield(bgc.facnar_y_Oorg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 4.0); % yield of biomass per unit oxygen reduced
+ bgc.facnar_y_Norg = bgc.nar_y_org .* fac_penalty;
+ bgc.facnar_y_no3  = substrate_yield(bgc.facnar_y_Norg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 2.0); % yield of biomass per unit nitrate reduced
+ bgc.facnar_Vmax_no3 = bgc.mumax_het .* den_penalty .* fac_penalty ./ bgc.facnar_y_no3; 
+
+ %%%%%%% Facultative NIR heterotroph %%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ fac_penalty = 0.8; 
+ bgc.facnar_y_Oorg = bgc.het_y_org .* fac_penalty; 
+ bgc.facnar_y_oxy  = substrate_yield(bgc.facnar_y_Oorg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 4.0); % yield of biomass per unit oxygen reduced
+ bgc.facnar_y_Norg = bgc.nar_y_org .* fac_penalty;
+ bgc.facnar_y_no3  = substrate_yield(bgc.facnar_y_Norg, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 2.0); % yield of biomass per unit nitrate reduced
+ bgc.facnar_Vmax_no3 = bgc.mumax_het .* den_penalty .* fac_penalty ./ bgc.facnar_y_no3; 
 
  %%%%%%% Ammonia oxidising archaea %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -102,7 +120,7 @@
  bgc.noo_y_oxy = 4 .* f_noo .* (1-f_noo) ./ d_noo;                      % yield of NOO for oxygen
  % kinetics
  bgc.noo_mumax = 1.0;                                   % 1.0   % Spieck et al. 2014; Kitzinger et al. 2020
- bgc.noo_Vmax_nh4 = bgc.noo_mumax ./ bgc.noo_y_no2;
+ bgc.noo_Vmax_no2 = bgc.noo_mumax ./ bgc.noo_y_no2;
  bgc.noo_Kno2  = 0.1;                                   % 0.1   % Reported from OMZ (Sun et al. 2017), oligotrophic conditions (Zhang et al. 2020), and Southern Ocean (Mdutyana et al. 2022)
 
  %%%%%%% Anammox bacteria %%%%%%%%
@@ -121,7 +139,7 @@
  bgc.aox_y_nh4 = 1/70;      % mol N biomass per mol NH4 (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
  bgc.aox_y_no2 = 1/81;      % mol N biomass per mol NO2 (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
  bgc.aox_e_no3 = 11;        % mol NO3 per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
- bgc.aox_e_n2 = 139;        % mol N (in N2 per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number 
+ bgc.aox_e_n2 = 139;        % mol N (in N2) per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number 
  % kinetics
  bgc.aox_mumax = 0.2;                                   % 0.2   % Okabe et al. 2021 ISME | Lotti et al. 2014
  bgc.aox_Vmax_nh4 = bgc.aox_mumax ./ bgc.aox_y_nh4;

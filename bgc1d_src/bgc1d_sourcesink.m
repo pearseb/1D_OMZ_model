@@ -27,21 +27,72 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % % % % Uptake rates (p)  % % % %
  % % % % % % % % % % % % % % % % %
  
- p_het_org = bgc.het_Vmax_org .* ( pon ./ (pon + bgc.het_Korg) );           % Uptake of organic matter
- p_het_oxy = bgc.het_po_coef .* tr.o2;                                      % Uptake of oxygen
- p_aoo_nh4 = bgc.aoo_Vmax_nh4 .* ( tr.nh4 ./ (tr.nh4 + bgc.aoo_Knh4) );     % Uptake of NH4
- p_aoo_oxy = bgc.aoo_po_coef .* tr.o2;                                      % Uptake of oxygen
- p_noo_no2 = bgc.noo_Vmax_no2 .* ( tr.no2 ./ (tr.no2 + bgc.noo_Kno2) );     % Uptake of NO2
- p_noo_oxy = bgc.noo_po_coef .* tr.o2;                                      % Uptake of oxygen
+ p_het_oxy     = bgc.het_po_coef .* tr.o2;                                      % Uptake of oxygen by heterotrophs
+ 
+ p_facnar_no3  = bgc.facnar_Vmax_no3  .* ( tr.no3 ./ (tr.no3 + bgc.nar_Kno3));  % Uptake of NO3
+ p_facnar_Oorg = bgc.facnar_Vmax_Oorg .* ( pon ./ (pon + bgc.het_Korg) );       % Uptake of organic matter
+ p_facnar_Norg = bgc.facnar_Vmax_Norg .* ( pon ./ (pon + bgc.het_Korg) );       % Uptake of organic matter
+ 
+ p_facnir_no2  = bgc.facnir_Vmax_no2  .* ( tr.no2 ./ (tr.no2 + bgc.nir_Kno2));  % Uptake of NO2
+ p_facnir_Oorg = bgc.facnir_Vmax_Oorg .* ( pon ./ (pon + bgc.het_Korg) );       % Uptake of organic matter
+ p_facnir_Norg = bgc.facnir_Vmax_Norg .* ( pon ./ (pon + bgc.het_Korg) );       % Uptake of organic matter
+ 
+ p_aoo_nh4     = bgc.aoo_Vmax_nh4 .* ( tr.nh4 ./ (tr.nh4 + bgc.aoo_Knh4) );     % Uptake of NH4
+ p_aoo_oxy     = bgc.aoo_po_coef .* tr.o2;                                      % Uptake of oxygen
+
+ p_noo_no2     = bgc.noo_Vmax_no2 .* ( tr.no2 ./ (tr.no2 + bgc.noo_Kno2) );     % Uptake of NO2
+ p_noo_oxy     = bgc.noo_po_coef .* tr.o2;                                      % Uptake of oxygen
 
  % % % % % % % % % % % % % % % % %
  % % % % Growth rates (u)  % % % %
  % % % % % % % % % % % % % % % % %
  
- u_het = max(0.0, min((p_het_org .* bgc.het_y_org), (p_het_oxy .* bgc.het_y_oxy))) ./ d2s; 
+ u_facnar_aer = max(0.0, min((p_facnar_Oorg .* bgc.facnar_y_Oorg), (p_het_oxy .* bgc.facnar_y_oxy))) ./ d2s; 
+ u_facnar_ana = max(0.0, min((p_facnar_Norg .* bgc.facnar_y_Norg), (p_facnar_no3 .* bgc.facnar_y_no3))) ./ d2s; 
+ 
+ u_facnir_aer = max(0.0, min((p_facnir_Oorg .* bgc.facnir_y_Oorg), (p_het_oxy .* bgc.facnir_y_oxy))) ./ d2s; 
+ u_facnir_ana = max(0.0, min((p_facnir_Norg .* bgc.facnir_y_Norg), (p_facnir_no2 .* bgc.facnir_y_no2))) ./ d2s; 
+ 
  u_aoo = max(0.0, min((p_aoo_nh4 .* bgc.aoo_y_nh4), (p_aoo_oxy .* bgc.aoo_y_oxy))) ./ d2s; 
  u_noo = max(0.0, min((p_noo_no2 .* bgc.noo_y_no2), (p_noo_oxy .* bgc.noo_y_oxy))) ./ d2s; 
 
+
+ % % % % % % % % % % % % % % % % %
+ % % % % Facultative types % % % %
+ % % % % % % % % % % % % % % % % %
+ 
+ u_facnar = zeros(1,bgc.nz);
+ facnar_y_org = zeros(1,bgc.nz);
+ facnar_aerob = zeros(1,bgc.nz);
+ 
+ u_facnir = zeros(1,bgc.nz);
+ facnir_y_org = zeros(1,bgc.nz);
+ facnir_aerob = zeros(1,bgc.nz);
+ 
+ for zz = 1:bgc.nz
+     % Faculative NAR heterotroph
+     if u_facnar_aer(zz) >= u_facnar_ana(zz)
+         u_facnar(zz) = u_facnar_aer(zz);
+         facnar_y_org(zz) = bgc.facnar_y_Oorg; 
+         facnar_aerob(zz) = 1.0;
+     else
+         u_facnar(zz) = u_facnar_ana(zz);
+         facnar_y_org(zz) = bgc.facnar_y_Norg; 
+         facnar_aerob(zz) = 0.0;
+     end
+     % Faculative NIR heterotroph
+     if u_facnir_aer(zz) >= u_facnir_ana(zz)
+         u_facnir(zz) = u_facnir_aer(zz);
+         facnir_y_org(zz) = bgc.facnir_y_Oorg; 
+         facnir_aerob(zz) = 1.0;
+     else
+         u_facnir(zz) = u_facnir_ana(zz);
+         facnir_y_org(zz) = bgc.facnir_y_Norg; 
+         facnir_aerob(zz) = 0.0;
+     end
+ end
+ 
+ 
  % % % % % % % % % % % % % % %
  % % % % Mortality (m) % % % %
  % % % % % % % % % % % % % % %
@@ -49,7 +100,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  min_bio = 1e-4;
  mort = 0.1 ./ d2s; 
 
-
+ 
 
  %!!! mm1 = Michaelis-Menton hyperbolic growth (var / var * k) where k is
  %!!! concentration of var where growth rate is half its maximum value
@@ -178,7 +229,8 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % Biomasses %
  % % % % % % %
 
- sms.het = (tr.het .* u_het) - (mort .* tr.het .* max(0.0, tr.het - min_bio));
+ sms.facnar = (tr.facnar .* u_facnar) - (mort .* tr.facnar .* max(0.0, tr.facnar - min_bio));
+ sms.facnir = (tr.facnir .* u_facnir) - (mort .* tr.facnir .* max(0.0, tr.facnir - min_bio));
  sms.aoo = (tr.aoo .* u_aoo) - (mort .* tr.aoo .* max(0.0, tr.aoo - min_bio)); 
  sms.noo = (tr.noo .* u_noo) - (mort .* tr.noo .* max(0.0, tr.noo - min_bio));
  
