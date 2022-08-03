@@ -125,7 +125,7 @@
  % Adds estimate of particle flux
  % This is somewhat approximate because it's recalculated from POC
  % And sinking speed at the tracer cells
- bgc.poc_flux = -bgc.wsink .* bgc.poc*86400;					% mmol C/m2/d
+ bgc.pon_flux = -bgc.wsink .* bgc.pon*86400;					% mmol N/m2/d
 
  if bgc.RunIsotopes
     bgc.r15no3 = sms.r15no3;

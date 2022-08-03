@@ -47,21 +47,21 @@
  bgc.nz = bgc.npt + 1;					% Number of points in z
  bgc.dz = (bgc.ztop - bgc.zbottom)/bgc.npt;		% dz (m)
  bgc.zgrid = linspace(bgc.ztop,bgc.zbottom,bgc.npt+1);	% z points (m)
- bgc.zgridpoc = linspace(bgc.ztop+bgc.dz/2,bgc.zbottom-bgc.dz/2,bgc.npt+2);
+ bgc.zgridpon = linspace(bgc.ztop+bgc.dz/2,bgc.zbottom-bgc.dz/2,bgc.npt+2);
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %%%%%%% Particle sinking %%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % If bgc.varsink = 1 then we use a martin curve remineralization profile
-% We infer the depth dependant sinking speed of POC using bgc.b,  the exponent 
+% We infer the depth dependant sinking speed of PON using bgc.b,  the exponent 
 % of the martin curve phi = phi0*(z/z0)^b. Modify bgc.b in bgc.initialize to 
 % modify the sinking profile. 
 
  if bgc.varsink == 1					
-    bgc.zpocref = bgc.zgrid(1)+bgc.dz/2;
+    bgc.zponref = bgc.zgrid(1)+bgc.dz/2;
     bgc.a = bgc.Krem / bgc.b;
-    bgc.wsinkpoc =  bgc.a .* (-bgc.zgridpoc);
+    bgc.wsinkpon =  bgc.a .* (-bgc.zgridpon);
     bgc.wsink =  -bgc.a .* (bgc.zgrid);    
  else
     bgc.wsink = bgc.wsink_param .* ones(1,length(bgc.zgrid ));

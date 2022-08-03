@@ -18,20 +18,20 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
  ssms  = zeros(bgc.nt_hist,bgc.nvar,bgc.nz);
  srest = zeros(bgc.nt_hist,bgc.nvar,bgc.nz);
 
- poc = zeros(2,bgc.nz);
  o2  = zeros(2,bgc.nz);
  no3 = zeros(2,bgc.nz);
- no2 = zeros(2,bgc.nz);
- nh4 = zeros(2,bgc.nz);
- n2o = zeros(2,bgc.nz);
- n2  = zeros(2,bgc.nz);
+ pon = zeros(2,bgc.nz);
  po4 = zeros(2,bgc.nz);
+ n2o = zeros(2,bgc.nz);
+ nh4 = zeros(2,bgc.nz);
+ no2 = zeros(2,bgc.nz);
+ n2  = zeros(2,bgc.nz);
  facnar = zeros(2,bgc.nz);
  facnir = zeros(2,bgc.nz);
  aoo = zeros(2,bgc.nz);
  noo = zeros(2,bgc.nz);
  
- fpoc_out = zeros(2,bgc.nz+1);
+ fpon_out = zeros(2,bgc.nz+1);
 
  if bgc.RunIsotopes
     i15no3  = zeros(2,bgc.nz);
@@ -45,7 +45,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     %initial conditions
     o2(1,:)  = bgc.rst(1,:);
     no3(1,:) = bgc.rst(2,:);
-    poc(1,:) = bgc.rst(3,:);
+    pon(1,:) = bgc.rst(3,:);
     po4(1,:) = bgc.rst(4,:);
     n2o(1,:) = bgc.rst(5,:);
     nh4(1,:) = bgc.rst(6,:);
@@ -63,14 +63,14 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
        i15n2oB(1,:) = bgc.rst(16,:);
     end
  else
-    poc(1,:) = linspace(bgc.poc_flux_top/bgc.wsink(1),0.01,bgc.npt+1);
     o2(1,:)  = linspace(bgc.o2_top,bgc.o2_bot,bgc.npt+1);
     no3(1,:) = linspace(bgc.no3_top,bgc.no3_bot,bgc.npt+1);
-    no2(1,:) = 10^-23;%linspace(bgc.no2_top,bgc.no2_bot,bgc.npt+1);
-    nh4(1,:) = 10^-23;%linspace(bgc.nh4_top,bgc.nh4_bot,bgc.npt+1);
-    n2o(1,:) = linspace(bgc.n2o_top,bgc.n2o_bot,bgc.npt+1);
-    n2(1,:)  = linspace(bgc.n2_top,bgc.n2_bot,bgc.npt+1);
+    pon(1,:) = linspace(bgc.pon_flux_top/bgc.wsink(1),0.01,bgc.npt+1);
     po4(1,:) = linspace(bgc.po4_top,bgc.po4_bot,bgc.npt+1);
+    n2o(1,:) = linspace(bgc.n2o_top,bgc.n2o_bot,bgc.npt+1);
+    nh4(1,:) = 10^-23;%linspace(bgc.nh4_top,bgc.nh4_bot,bgc.npt+1);
+    no2(1,:) = 10^-23;%linspace(bgc.no2_top,bgc.no2_bot,bgc.npt+1);
+    n2(1,:)  = linspace(bgc.n2_top,bgc.n2_bot,bgc.npt+1);
     facnar(1,:) = linspace(bgc.facnar_top,bgc.facnar_bot,bgc.npt+1);
     facnir(1,:) = linspace(bgc.facnir_top,bgc.facnir_bot,bgc.npt+1);
     aoo(1,:) = linspace(bgc.aoo_top,bgc.aoo_bot,bgc.npt+1);
@@ -87,7 +87,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
  % dump tracers in a structure "tr" - one by one (avoids eval)
  tr.o2  = max(0.0, o2(1,:));
  tr.no3 = max(0.0, no3(1,:));
- tr.poc = max(0.0, poc(1,:));
+ tr.pon = max(0.0, pon(1,:));
  tr.po4 = max(0.0, po4(1,:));
  tr.n2o = max(0.0, n2o(1,:));
  tr.nh4 = max(0.0, nh4(1,:));
@@ -111,23 +111,23 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
  sms =  bgc1d_sourcesink(bgc,tr);
 
  % % % Initialize particulate flux at the top
- fpoc_out(1,1) = bgc.poc_flux_top;
+ fpon_out(1,1) = bgc.pon_flux_top;
 
- % % %  Update steady state POC sinking flux
+ % % %  Update steady state PON sinking flux
  for indz=1:bgc.nz
     % Explicit sinking
-    %fpoc_out(1,indz+1) = fpoc_out(1,indz)*(1.0 - bgc.dz*sms.kpoc(indz)/bgc.wsink(indz));
+    %fpon_out(1,indz+1) = fpon_out(1,indz)*(1.0 - bgc.dz*sms.kpon(indz)/bgc.wsink(indz));
     % Implicit sinking
-    fpoc_out(1,indz+1) = fpoc_out(1,indz)/(1.0 + bgc.dz*sms.kpoc(indz)/bgc.wsink(indz));
-    % Updates POC, by mass conservation: remin = divergence of flux
-    poc(1,indz)=(fpoc_out(1,indz)-fpoc_out(1,indz+1))/(bgc.dz*sms.kpoc(indz));
+    fpon_out(1,indz+1) = fpon_out(1,indz)/(1.0 + bgc.dz*sms.kpon(indz)/bgc.wsink(indz));
+    % Updates PON, by mass conservation: remin = divergence of flux
+    pon(1,indz)=(fpon_out(1,indz)-fpon_out(1,indz+1))/(bgc.dz*sms.kpon(indz));
  end
 
- % % %  Update steady state POC sinking flux (PJB)
- %poc(1,1) = bgc.poc_top;
+ % % %  Update steady state PON sinking flux (PJB)
+ %pon(1,1) = bgc.pon_top;
  %for indz=1:(bgc.nz-1)
- %   % populate POC through depth using Martin-curve
- %   poc(1,indz+1) = poc(1,1) * (bgc.zgrid(indz+1)/bgc.zgrid(1)).^(bgc.b);
+ %   % populate PON through depth using Martin-curve
+ %   pon(1,indz+1) = pon(1,1) * (bgc.zgrid(indz+1)/bgc.zgrid(1)).^(bgc.b);
  %end
 
  % % % % % % % % % % % % % % % % % % 
@@ -231,7 +231,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     % dump tracers in a structure "tr" - one by one (avoids eval)
     tr.o2  = max(0.0, o2(1,:));
     tr.no3 = max(0.0, no3(1,:));
-    tr.poc = max(0.0, poc(1,:));
+    tr.pon = max(0.0, pon(1,:));
     tr.po4 = max(0.0, po4(1,:));
     tr.n2o = max(0.0, n2o(1,:));
     tr.nh4 = max(0.0, nh4(1,:));
@@ -252,26 +252,26 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     % Calculate SMS
     sms =  bgc1d_sourcesink(bgc,tr);
     
-    % % %  Update steady state POC sinking flux
-    fpoc_out(2,1) = bgc.poc_flux_top;
+    % % %  Update steady state PON sinking flux
+    fpon_out(2,1) = bgc.pon_flux_top;
 
     for indz=1:bgc.nz
        % Explicit sinking
-       %fpoc_out(2,indz+1) = fpoc_out(2,indz)*(1.0 - bgc.dz*sms.kpoc(indz)/bgc.wsink(indz));
+       %fpon_out(2,indz+1) = fpon_out(2,indz)*(1.0 - bgc.dz*sms.kpon(indz)/bgc.wsink(indz));
        % Implicit sinking
-       fpoc_out(2,indz+1) = fpoc_out(2,indz)/(1.0 + bgc.dz*sms.kpoc(indz)/bgc.wsink(indz));
+       fpon_out(2,indz+1) = fpon_out(2,indz)/(1.0 + bgc.dz*sms.kpon(indz)/bgc.wsink(indz));
     end       
-    % Use array calculation to perform POC flux update (faster)
-    poc(2,:) = (fpoc_out(2,1:bgc.nz)-fpoc_out(2,2:bgc.nz+1))./(bgc.dz*sms.kpoc);
+    % Use array calculation to perform PON flux update (faster)
+    pon(2,:) = (fpon_out(2,1:bgc.nz)-fpon_out(2,2:bgc.nz+1))./(bgc.dz*sms.kpon);
 
     %%%% Do sources minus sinks
     o2(2,2:end-1)  = o2(2,2:end-1)  + sms.o2(2:end-1)  * dt;
     no3(2,2:end-1) = no3(2,2:end-1) + sms.no3(2:end-1) * dt;
-    no2(2,2:end-1) = no2(2,2:end-1) + sms.no2(2:end-1) * dt;
-    nh4(2,2:end-1) = nh4(2,2:end-1) + sms.nh4(2:end-1) * dt;
-    n2o(2,2:end-1) = n2o(2,2:end-1) + sms.n2o(2:end-1) * dt;
-    n2(2,2:end-1)  = n2(2,2:end-1)  + sms.n2(2:end-1)  * dt;
     po4(2,2:end-1) = po4(2,2:end-1) + sms.po4(2:end-1) * dt;
+    n2o(2,2:end-1) = n2o(2,2:end-1) + sms.n2o(2:end-1) * dt;
+    nh4(2,2:end-1) = nh4(2,2:end-1) + sms.nh4(2:end-1) * dt;
+    no2(2,2:end-1) = no2(2,2:end-1) + sms.no2(2:end-1) * dt;
+    n2(2,2:end-1)  = n2(2,2:end-1)  + sms.n2(2:end-1)  * dt;
     facnar(2,2:end-1) = facnar(2,2:end-1) + sms.facnar(2:end-1) * dt;
     facnir(2,2:end-1) = facnir(2,2:end-1) + sms.facnir(2:end-1) * dt;
     aoo(2,2:end-1) = aoo(2,2:end-1) + sms.aoo(2:end-1) * dt;
@@ -289,11 +289,11 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
        restoring = bgc1d_restoring(bgc,tr);
        o2(2,2:end-1)  = o2(2,2:end-1)  + restoring.o2(2:end-1)  * dt;
        no3(2,2:end-1) = no3(2,2:end-1) + restoring.no3(2:end-1) * dt;
-       no2(2,2:end-1) = no2(2,2:end-1) + restoring.no2(2:end-1) * dt;
-       nh4(2,2:end-1) = nh4(2,2:end-1) + restoring.nh4(2:end-1) * dt;
-       n2o(2,2:end-1) = n2o(2,2:end-1) + restoring.n2o(2:end-1) * dt;
-       n2(2,2:end-1)  = n2(2,2:end-1)  + restoring.n2(2:end-1)  * dt;
        po4(2,2:end-1) = po4(2,2:end-1) + restoring.po4(2:end-1) * dt;
+       n2o(2,2:end-1) = n2o(2,2:end-1) + restoring.n2o(2:end-1) * dt;
+       nh4(2,2:end-1) = nh4(2,2:end-1) + restoring.nh4(2:end-1) * dt;
+       no2(2,2:end-1) = no2(2,2:end-1) + restoring.no2(2:end-1) * dt;
+       n2(2,2:end-1)  = n2(2,2:end-1)  + restoring.n2(2:end-1)  * dt;
        facnar(2,2:end-1) = facnar(2,2:end-1) + restoring.facnar(2:end-1) * dt;    
        facnir(2,2:end-1) = facnir(2,2:end-1) + restoring.facnir(2:end-1) * dt;    
        aoo(2,2:end-1) = aoo(2,2:end-1) + restoring.aoo(2:end-1) * dt;    
@@ -312,18 +312,18 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
    %end
       
     %%%% old equals new  
-    o2(1,:)  = o2(2,:);
-    no3(1,:) = no3(2,:);
-    no2(1,:) = no2(2,:);
-    nh4(1,:) = nh4(2,:);
-    n2o(1,:) = n2o(2,:);
-    n2(1,:)  = n2(2,:);
-    po4(1,:) = po4(2,:);
-    poc(1,:) = poc(2,:);  
-    facnar(1,:) = facnar(2,:);  
-    facnir(1,:) = facnir(2,:);  
-    aoo(1,:) = aoo(2,:);  
-    noo(1,:) = noo(2,:);
+    o2(1,:)  = max(0.0, o2(2,:));
+    no3(1,:) = max(0.0, no3(2,:));
+    pon(1,:) = max(0.0, pon(2,:));  
+    po4(1,:) = max(0.0, po4(2,:));
+    n2o(1,:) = max(0.0, n2o(2,:));
+    nh4(1,:) = max(0.0, nh4(2,:));
+    no2(1,:) = max(0.0, no2(2,:));
+    n2(1,:)  = max(0.0, n2(2,:));
+    facnar(1,:) = max(0.0, facnar(2,:));  
+    facnir(1,:) = max(0.0, facnir(2,:));  
+    aoo(1,:) = max(0.0, aoo(2,:));  
+    noo(1,:) = max(0.0, noo(2,:));
     if bgc.RunIsotopes
        i15no3(1,:)  = i15no3(2,:);
        i15no2(1,:)  = i15no2(2,:);
@@ -344,7 +344,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
        % Saving tracer field
        sol(iout,1,:) = o2(1,:);
        sol(iout,2,:) = no3(1,:);
-       sol(iout,3,:) = poc(1,:);
+       sol(iout,3,:) = pon(1,:);
        sol(iout,4,:) = po4(1,:);
        sol(iout,5,:) = n2o(1,:);
        sol(iout,6,:) = nh4(1,:);
