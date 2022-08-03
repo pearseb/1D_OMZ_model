@@ -79,7 +79,7 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
 % 	  (9) i15no3 (10) i15no2 (11) i15nh4 (12) i15n2oA (13) i15n2oB 
 % % % % % % % % % % % % % % % % % % % % % % % % 
  tic;
- [bgc.sol_time, ~, ~, ~, ~] = bgc1d_advection_diff_opt(bgc);
+ [bgc.sol_time, bgc.sadv, bgc.sdiff, bgc.ssms, ~] = bgc1d_advection_diff_opt(bgc);
  bgc.RunTime = toc;
  disp(['Runtime : ' num2str(bgc.RunTime)]);
 
@@ -120,3 +120,57 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
     bgc1d_plot(bgc); 
  end
 
+ bgc.pon_trc = squeeze(bgc.sol_time(:,3,:));
+ bgc.pon_adv = squeeze(bgc.sadv(:,3,:));
+ bgc.pon_dif = squeeze(bgc.sdiff(:,3,:));
+ bgc.pon_sms = squeeze(bgc.ssms(:,3,:));
+
+ bgc.o2_trc = squeeze(bgc.sol_time(:,1,:));
+ bgc.o2_adv = squeeze(bgc.sadv(:,1,:));
+ bgc.o2_dif = squeeze(bgc.sdiff(:,1,:));
+ bgc.o2_sms = squeeze(bgc.ssms(:,1,:));
+
+ figure(1)
+ subplot(2,2,1)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(bgc.pon_trc)); ylim([-400 0]); colorbar
+ subplot(2,2,2)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(bgc.pon_adv)); ylim([-400 0]); colorbar
+ subplot(2,2,3)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(bgc.pon_dif)); ylim([-400 0]); colorbar
+ subplot(2,2,4)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(bgc.pon_sms)); ylim([-400 0]); colorbar
+
+ figure(2)
+ subplot(2,3,1)
+ plot(bgc.o2, bgc.zgrid)
+ subplot(2,3,2)
+ plot(bgc.no3, bgc.zgrid)
+ subplot(2,3,3)
+ plot(bgc.pon, bgc.zgrid)
+ subplot(2,3,4)
+ plot(bgc.no2, bgc.zgrid); hold on; plot(bgc.nh4, bgc.zgrid); hold off
+ subplot(2,3,5)
+ plot(bgc.facnar, bgc.zgrid); hold on; plot(bgc.facnir, bgc.zgrid); hold off
+ subplot(2,3,6)
+ plot(bgc.aoo, bgc.zgrid); hold on; plot(bgc.noo, bgc.zgrid); hold off
+
+ figure(3)
+ subplot(3,3,1)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,1,:)))); colorbar; title('O2')
+ 
+ subplot(3,3,2)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,2,:)))); colorbar; title('NO3')
+ subplot(3,3,3)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,3,:)))); colorbar; title('PON')
+ subplot(3,3,4)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,6,:)))); colorbar; title('NH4')
+ subplot(3,3,5)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,7,:)))); colorbar; title('NO2')
+ subplot(3,3,6)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,9,:)))); colorbar; title('FacNAR')
+ subplot(3,3,7)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,10,:)))); colorbar; title('FacNIR')
+ subplot(3,3,8)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,11,:)))); colorbar; title('AOO')
+ subplot(3,3,9)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,12,:)))); colorbar; title('NOO')

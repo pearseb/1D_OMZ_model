@@ -14,7 +14,7 @@
        bgc.(['adv' bgc.varname{indt}])  = bgc.sadv(indt,:);
        bgc.(['diff' bgc.varname{indt}]) = bgc.sdiff(indt,:);
        bgc.(['sms' bgc.varname{indt}])  = bgc.ssms(indt,:);
-       bgc.(['rest' bgc.varname{indt}]) = bgc.srest(indt,:);
+       %bgc.(['rest' bgc.varname{indt}]) = bgc.srest(indt,:);
     end
     bgc.(['d' bgc.varname{indt}]) = nan(size(bgc.(bgc.varname{indt})));
     bgc.(['d' bgc.varname{indt}])(2:end-1) = ...

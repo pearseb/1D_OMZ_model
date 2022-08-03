@@ -38,7 +38,7 @@ function bgc = bgc1d_initboundary(bgc)
     bgc.d15n2oB_bot = -2.6;        	% Bry cond. for deep delN2O-B           (permil)	
  case 'ETSP'
    %bgc.pon_flux_top = -7.5/86400*0.8*2.00;% Bry cond. for top POC Flux            (mmolN/m2/s)
-    bgc.pon_flux_top = -7.5/86400*(16/122);      % Bry cond. for top POC Flux      (mmolN/m2/s)
+    bgc.pon_flux_top = -7.5/86400*2.0*(16/122);      % Bry cond. for top POC Flux      (mmolN/m2/s)
     bgc.o2_top  = 215;              	% Bry cond. for surface Oxygen          (mmolO2/m3)
     bgc.o2_top  = 225;              	% Bry cond. for surface Oxygen          (mmolO2/m3)
     bgc.o2_bot  = 77.; 			% Bry cond. for deep Oxygen             (mmolO2/m3)
