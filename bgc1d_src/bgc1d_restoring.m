@@ -84,6 +84,13 @@
     restoring.noo = (bgc.restore.noo_cout-t.noo)./tauh;
  end
 
+ if bgc.AOXrest==0
+    restoring.aox = zeros(1,length(t.aox));
+ else
+    cout = zeros(size(bgc.zgrid));
+    restoring.aox = (bgc.restore.aox_cout-t.aox)./tauh;
+ end
+
  if bgc.RunIsotopes
  	if bgc.i15NO3rest==0
  	   restoring.i15no3 = zeros(1,length(t.i15no3));

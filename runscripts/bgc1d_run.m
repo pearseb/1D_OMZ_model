@@ -152,12 +152,11 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
  subplot(2,3,5)
  plot(bgc.facnar, bgc.zgrid); hold on; plot(bgc.facnir, bgc.zgrid); hold off
  subplot(2,3,6)
- plot(bgc.aoo, bgc.zgrid); hold on; plot(bgc.noo, bgc.zgrid); hold off
+ plot(bgc.aoo, bgc.zgrid); hold on; plot(bgc.noo, bgc.zgrid); plot(bgc.aox, bgc.zgrid); hold off
 
  figure(3)
  subplot(3,3,1)
  contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,1,:)))); colorbar; title('O2')
- 
  subplot(3,3,2)
  contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,2,:)))); colorbar; title('NO3')
  subplot(3,3,3)

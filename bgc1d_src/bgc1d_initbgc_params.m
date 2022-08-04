@@ -58,7 +58,7 @@
  bgc.nar_y_no3 = substrate_yield(bgc.nar_y_org, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 2.0); % yield of biomass per unit oxygen reduced
  % kinetics
  bgc.nar_Vmax_org = bgc.het_mumax .* den_penalty ./ bgc.nar_y_org;
- bgc.nar_Korg  = 0.5;   % 0.1   % Half sat. constant for organic N uptake  (guess)
+ bgc.nar_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
  bgc.nar_Kno3  = 4.0;   % 4.0   % Half sat. constant for NO3 uptake  (Almeida et al. 1995)
  
 
@@ -67,10 +67,10 @@
  den_penalty = 0.9;
  % Yields
  bgc.nir_y_org = bgc.het_y_org .* den_penalty;      % denitrification is not as efficient as aerobic heterotrophy
- bgc.nir_y_no3 = substrate_yield(bgc.nir_y_org, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 3.0); % yield of biomass per unit oxygen reduced
+ bgc.nir_y_no2 = substrate_yield(bgc.nir_y_org, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 3.0); % yield of biomass per unit oxygen reduced
  % kinetics
  bgc.nir_Vmax_org = bgc.het_mumax .* den_penalty ./ bgc.nir_y_org;
- bgc.nir_Korg  = 0.5;   % 0.1   % Half sat. constant for organic N uptake  (guess)
+ bgc.nir_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
  bgc.nir_Kno2  = 4.0;   % 4.0   % Half sat. constant for NO3 uptake  (Almeida et al. 1995)
  
 
