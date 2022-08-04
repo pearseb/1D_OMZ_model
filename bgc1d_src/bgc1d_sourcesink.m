@@ -19,6 +19,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  	tr.(tmpvar{indf}) = tmp;
  end
  
+ lability = 0.5;   % fraction of PON that is labile at any one time
 
  % % % % % % % % % % % % % % % % %
  % % % % Uptake rates (p)  % % % %
@@ -26,13 +27,13 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  
  p_het_oxy     = bgc.het_po_coef .* tr.o2;                                      % Uptake of oxygen by heterotrophs
  
- p_facnar_no3  = bgc.facnar_Vmax_no3  .* ( tr.no3 ./ (tr.no3 + bgc.nar_Kno3));  % Uptake of NO3
- p_facnar_Oorg = bgc.facnar_Vmax_Oorg .* ( tr.pon ./ (tr.pon + bgc.nar_Korg) ); % Uptake of organic matter
- p_facnar_Norg = bgc.facnar_Vmax_Norg .* ( tr.pon ./ (tr.pon + bgc.nar_Korg) ); % Uptake of organic matter
+ p_facnar_no3  = bgc.facnar_Vmax_no3  .* ( tr.no3 ./ (tr.no3 + bgc.nar_Kno3) ); % Uptake of NO3
+ p_facnar_Oorg = bgc.facnar_Vmax_Oorg .* ( tr.pon ./ (tr.pon + bgc.nar_Korg) ) .* lability; % Uptake of organic matter
+ p_facnar_Norg = bgc.facnar_Vmax_Norg .* ( tr.pon ./ (tr.pon + bgc.nar_Korg) ) .* lability; % Uptake of organic matter
  
- p_facnir_no2  = bgc.facnir_Vmax_no2  .* ( tr.no2 ./ (tr.no2 + bgc.nir_Kno2));  % Uptake of NO2
- p_facnir_Oorg = bgc.facnir_Vmax_Oorg .* ( tr.pon ./ (tr.pon + bgc.nir_Korg) ); % Uptake of organic matter
- p_facnir_Norg = bgc.facnir_Vmax_Norg .* ( tr.pon ./ (tr.pon + bgc.nir_Korg) ); % Uptake of organic matter
+ p_facnir_no2  = bgc.facnir_Vmax_no2  .* ( tr.no2 ./ (tr.no2 + bgc.nir_Kno2) ); % Uptake of NO2
+ p_facnir_Oorg = bgc.facnir_Vmax_Oorg .* ( tr.pon ./ (tr.pon + bgc.nir_Korg) ) .* lability; % Uptake of organic matter
+ p_facnir_Norg = bgc.facnir_Vmax_Norg .* ( tr.pon ./ (tr.pon + bgc.nir_Korg) ) .* lability; % Uptake of organic matter
  
  p_aoo_nh4     = bgc.aoo_Vmax_nh4 .* ( tr.nh4 ./ (tr.nh4 + bgc.aoo_Knh4) );     % Uptake of NH4
  p_aoo_oxy     = bgc.aoo_po_coef .* tr.o2;                                      % Uptake of oxygen
@@ -238,7 +239,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % Substrate %
  % % % % % % %
 
- sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .*facnar_aerob )...
+ sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .* facnar_aerob )...
             - (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob)...
             - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy)...
             - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
@@ -271,19 +272,19 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  
  sms.kpon = sms.pon ./ tr.pon; 
 
- % PJB
 
  %---------------------------------------------------------------------- 
  % (9) Here adds diagnostics, to be handy when needed
  %---------------------------------------------------------------------- 
- diag.RemOx   = RemOx;		% mmolC/m3/s
- diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		% mmolN/m3/s
- diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		% mmolN/m3/s
- diag.Anammox = Anammox;	% mmolN2/m3/s
- diag.RemDen1 = RemDen1;	% mmolC/m3/s
- diag.RemDen2 = RemDen2;	% mmolC/m3/s
- diag.RemDen3 = RemDen3; 	% mmolC/m3/s
- diag.RemDen  = RemDen1 + RemDen2 + RemDen3;	%mmolC/m3/s
+ diag.RemOx   = (u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .* facnar_aerob )...
+                 + (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob);		% mmolO2/m3/s
+ diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		                            % mmolN/m3/s
+ diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		                            % mmolN/m3/s
+ diag.Anammox = (u_aox .* tr.aox .* bgc.aox_e_n2) .* 0.5;	                        % mmolN2/m3/s
+ diag.RemDen1 = (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob));	% mmolNO3/m3/s
+ diag.RemDen2 = (u_facnir .* tr.facnir ./ bgc.facnir_y_no2 .* (1 - facnir_aerob));	% mmolNO2/m3/s
+ diag.RemDen3 = RemDen3; 	% mmolN/m3/s
+ diag.RemDen  = RemDen1 + RemDen2 + RemDen3;	                                    %mmolN/m3/s
  diag.Jno2_hx = Jno2_hx;	% mmolN/m3/s
  diag.Jnn2o_hx   = Jnn2o_hx;	% mmolN/m3/s
  diag.Jnn2o_nden = Jnn2o_nden;	% mmolN/m3/s

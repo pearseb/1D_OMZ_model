@@ -36,10 +36,10 @@
  case 1
     % Original formulation - SYang
     % Specifies # timesteps, length and hist in timesteps 
-    years = 1; 
-    dt = 86400 ./ 48.0; % timestep in seconds bgc.hist =  500; 
+    years = 5; 
+    dt = 86400 ./ 24.0; % timestep in seconds bgc.hist =  500; 
     nt = years .* ((365 .* 86400) ./ dt);% Simulation length in timesteps
-    hist = 1 .* 86400 ./ dt; % save a snapshot every day
+    hist = 365 .* 86400 ./ dt; % save a snapshot every day
     endTimey = nt*dt/(365*86400); % end time of simulation (years)
     histTimey = hist*dt/(365*86400); % history timestep (years)
    % Creates dt and history vectors

@@ -11,10 +11,10 @@
  for indt=1:bgc.nvar
     bgc.(bgc.varname{indt}) = bgc.sol(indt,:);
     if bgc.flux_diag == 1
-       bgc.(['adv' bgc.varname{indt}])  = bgc.sadv(indt,:);
-       bgc.(['diff' bgc.varname{indt}]) = bgc.sdiff(indt,:);
-       bgc.(['sms' bgc.varname{indt}])  = bgc.ssms(indt,:);
-       %bgc.(['rest' bgc.varname{indt}]) = bgc.srest(indt,:);
+       bgc.(['adv' bgc.varname{indt}])  = squeeze(bgc.sadv(end,indt,:));
+       bgc.(['diff' bgc.varname{indt}]) = squeeze(bgc.sdiff(end,indt,:));
+       bgc.(['sms' bgc.varname{indt}])  = squeeze(bgc.ssms(end,indt,:));
+       %bgc.(['rest' bgc.varname{indt}]) = squeeze(bgc.srest(end,indt,:));
     end
     bgc.(['d' bgc.varname{indt}]) = nan(size(bgc.(bgc.varname{indt})));
     bgc.(['d' bgc.varname{indt}])(2:end-1) = ...
@@ -91,13 +91,13 @@
  [sms diag] = bgc1d_sourcesink(bgc,tr); 
  % Converts from (uM N/s) to (nM N/d)
  cnvrt = 1000*3600*24;
- bgc.remox      = diag.RemOx      * cnvrt;	% nM C/d
- bgc.ammox      = diag.Ammox      * cnvrt;	% nM n/d
- bgc.anammox    = 2.0 * diag.Anammox * cnvrt; 	% nM N/d : Units of N, not N2
- bgc.nitrox     = diag.Nitrox     * cnvrt;	% nM n/d
- bgc.remden     = diag.RemDen     * cnvrt;	% nM C/d
- bgc.remden1    = diag.RemDen1    * cnvrt;	% nM C/d
- bgc.remden2    = diag.RemDen2    * cnvrt;	% nM C/d
+ bgc.remox      = diag.RemOx      * cnvrt;	% nM O2/d
+ bgc.ammox      = diag.Ammox      * cnvrt;	% nM NH4/d
+ bgc.anammox    = diag.Anammox    * cnvrt; 	% nM N2/d : Units of N2, not N
+ bgc.nitrox     = diag.Nitrox     * cnvrt;	% nM NO2/d
+ bgc.remden     = diag.RemDen     * cnvrt;	% nM N/d
+ bgc.remden1    = diag.RemDen1    * cnvrt;	% nM NO3/d
+ bgc.remden2    = diag.RemDen2    * cnvrt;	% nM NO2/d
  bgc.remden3    = diag.RemDen3    * cnvrt;	% nM C/d
  bgc.jnn2o_hx   = diag.Jnn2o_hx   * cnvrt;	% nM N/d
  bgc.jnn2o_nden = diag.Jnn2o_nden * cnvrt;	% nM N/d

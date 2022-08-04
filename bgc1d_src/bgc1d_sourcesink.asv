@@ -203,7 +203,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  %sms.o2   =  -bgc.OCrem .* RemOx - 1.5.*Ammox - 0.5 .* Nitrox;
  %sms.no3  =  Nitrox - bgc.NCden1 .* RemDen1; % .* bgc.r14no3;
  %sms.pon  =  -(RemOx + RemDen1 + RemDen2 + RemDen3);
- sms.po4  =  bgc.PCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3);
+ %sms.po4  =  bgc.PCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3);
  %sms.nh4  =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;
  %sms.no2  =  Jno2_hx + bgc.NCden1 .* RemDen1 - bgc.NCden2 .* RemDen2 - Anammox - Nitrox; % .* bgc.r14no2;
  % N2 (mmol N2/m3/s, units of N2, not N)
@@ -238,7 +238,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % Substrate %
  % % % % % % %
 
- sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .*facnar_aerob )...
+ sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .* facnar_aerob )...
             - (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob)...
             - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy)...
             - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
@@ -252,9 +252,9 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
             + (bgc.mort .* tr.aox .* max(0.0, tr.aox - bgc.min_bio))...
             - (tr.facnar .* u_facnar ./ facnar_y_org)...
             - (tr.facnir .* u_facnir ./ facnir_y_org);
- sms.po4 =  
- sms.nh4 =  bgc.NCrem .* RemDen3...
-            + (u_facnar .* tr.facnar .* (1./facnar_y_org - 1))...
+ sms.po4 =  ((u_facnar .* tr.facnar .* (1./facnar_y_org - 1))...
+            + (u_facnir .* tr.facnir .* (1./facnir_y_org - 1))) ./ bgc.stoch_d;
+ sms.nh4 =  (u_facnar .* tr.facnar .* (1./facnar_y_org - 1))...
             + (u_facnir .* tr.facnir .* (1./facnir_y_org - 1))...
             - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4)...
             - (u_noo .* tr.noo)...
@@ -276,14 +276,15 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  %---------------------------------------------------------------------- 
  % (9) Here adds diagnostics, to be handy when needed
  %---------------------------------------------------------------------- 
- diag.RemOx   = RemOx;		% mmolC/m3/s
- diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		% mmolN/m3/s
- diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		% mmolN/m3/s
- diag.Anammox = Anammox;	% mmolN2/m3/s
- diag.RemDen1 = RemDen1;	% mmolC/m3/s
- diag.RemDen2 = RemDen2;	% mmolC/m3/s
- diag.RemDen3 = RemDen3; 	% mmolC/m3/s
- diag.RemDen  = RemDen1 + RemDen2 + RemDen3;	%mmolC/m3/s
+ diag.RemOx   = (u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .* facnar_aerob )...
+                 + (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob);		% mmolO2/m3/s
+ diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		        % mmolN/m3/s
+ diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		        % mmolN/m3/s
+ diag.Anammox = (u_aox .* tr.aox .* bgc.aox_e_n2) .* 0.5;	    % mmolN2/m3/s
+ diag.RemDen1 = (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob));	% mmolNO3/m3/s
+ diag.RemDen2 = (u_facnir .* tr.facnir ./ bgc.facnir_y_no2 .* (1 - facnir_aerob));	% mmolNO2/m3/s
+ diag.RemDen3 = RemDen3; 	% mmolN/m3/s
+ diag.RemDen  = RemDen1 + RemDen2 + RemDen3;	%mmolN/m3/s
  diag.Jno2_hx = Jno2_hx;	% mmolN/m3/s
  diag.Jnn2o_hx   = Jnn2o_hx;	% mmolN/m3/s
  diag.Jnn2o_nden = Jnn2o_nden;	% mmolN/m3/s
