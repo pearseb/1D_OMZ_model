@@ -60,6 +60,14 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  u_aox = max(0.0, min((p_aox_nh4 .* bgc.aox_y_nh4), (p_aox_no2 .* bgc.aox_y_no2))); 
  
 
+ % % % % % % % % % % % % % % % % % % % % % % % % % % 
+ % % % % Hack light limitation of nitrifiers % % % %
+ % % % % % % % % % % % % % % % % % % % % % % % % % % 
+ 
+ u_aoo = u_aoo .* (bgc.zgrid < -100);
+ u_noo = u_noo .* (bgc.zgrid < -100);
+
+
  % % % % % % % % % % % % % % % % %
  % % % % Facultative types % % % %
  % % % % % % % % % % % % % % % % %
