@@ -67,6 +67,9 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
  end
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
+% Pulse
+bgc.o2_pulse = ((bgc.zgrid > bgc.pulse_depbounds(1)) .* (bgc.zgrid < bgc.pulse_depbounds(2))) .* bgc.pulse_amplitude;
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % 
 % run the model 
@@ -160,3 +163,5 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
  subplot(236)
  plot(bgc.AnammoxFrac, bgc.zgrid); title("Anammox Frac")
  
+ figure(4)
+ contourf(bgc.hist_time, bgc.zgrid, transpose(squeeze(bgc.sol_time(:,1,:))), linspace(0,10,11)); colorbar

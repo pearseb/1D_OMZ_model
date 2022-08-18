@@ -36,10 +36,10 @@
  case 1
     % Original formulation - SYang
     % Specifies # timesteps, length and hist in timesteps 
-    years = 20; 
+    years = 40; 
     dt = 86400 ./ 6.0; % timestep in seconds bgc.hist =  500; 
     nt = years .* ((365 .* 86400) ./ dt);% Simulation length in timesteps
-    hist = 365 .* 86400 ./ dt; % save a snapshot every year
+    hist = 1 .* 86400 ./ dt; % save a snapshot every year
     endTimey = nt*dt/(365*86400); % end time of simulation (years)
     histTimey = hist*dt/(365*86400); % history timestep (years)
    % Creates dt and history vectors
@@ -190,6 +190,12 @@
  % Choose depth range
  bgc.forceanoxic_bounds = [-500 -100]; 
 
+ %%%%%% Pulses of O2 %%%%%%%
+ bgc.O2Pulses = 0;          % 1 is on
+ bgc.pulse_period = 10;     % days
+ bgc.pulse_amplitude = 0.5; % mmol O2 / m3
+ bgc.pulse_depbounds = [-300 -280];
+ 
  % Calculate BGC/N-cycling parameters  that depend on bgc1d_initbgc_params
  if bgc.depparams
     bgc = bgc1d_initialize_DepParam(bgc);

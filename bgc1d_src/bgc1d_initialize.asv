@@ -36,7 +36,7 @@
  case 1
     % Original formulation - SYang
     % Specifies # timesteps, length and hist in timesteps 
-    years = 40; 
+    years = 50; 
     dt = 86400 ./ 6.0; % timestep in seconds bgc.hist =  500; 
     nt = years .* ((365 .* 86400) ./ dt);% Simulation length in timesteps
     hist = 365 .* 86400 ./ dt; % save a snapshot every year
@@ -88,7 +88,7 @@
 
  %%%% Prognostic variables %%%%%%
  bgc.RunIsotopes = false; % true -> run with isotopes
- bgc.tracers = {'o2', 'no3','poc', 'po4', 'n2o', 'nh4', 'no2', 'n2', 'het', 'aoo', 'noo'};
+ bgc.tracers = {'o2', 'no3','pon', 'po4', 'n2o', 'nh4', 'no2', 'n2', 'facnar', 'facnir','aoo', 'noo', 'aox'};
  bgc.isotopes = {'i15no3', 'i15no2', 'i15nh4', 'i15n2oA', 'i15n2oB'};
  bgc.nvar_tr = length(bgc.tracers);
  bgc.nvar_is = length(bgc.isotopes);
@@ -146,18 +146,20 @@
 
  %%%%%% On and off switches %%%%%%%%%
  % Restoring switches: 1 to restore, 0 for no restoring
- bgc.RestoringOff = 1;	% 1: turns restoring off for all variables
+ bgc.RestoringOff = 0;	% 1: turns restoring off for all variables
 			% (supersedes all following terms, used to speedup code)
  bgc.PO4rest = 0;
  bgc.NO3rest = 0;
- bgc.O2rest  = 0;
+ bgc.O2rest  = 1;
  bgc.N2Orest = 0 ;
  bgc.NH4rest = 0;
  bgc.N2rest  = 0;
  bgc.NO2rest = 0;
- bgc.HETrest = 0;
+ bgc.FACNARrest = 0;
+ bgc.FACNIRrest = 0;
  bgc.AOOrest = 0;
- bgc.AOOrest = 0;
+ bgc.NOOrest = 0;
+ bgc.AOXrest = 0;
  bgc.i15NO3rest  = 0;
  bgc.i15NO2rest  = 0;
  bgc.i15NH4rest  = 0; 
@@ -184,10 +186,16 @@
  % O2 intrusion in the OMZ while keeping restoring in the rest of the
  % water column
  % As usual, 1 is on and 0 is off 
- bgc.forceanoxic = 0;
+ bgc.forceanoxic = 1;
  % Choose depth range
- bgc.forceanoxic_bounds = [-350 -100]; 
+ bgc.forceanoxic_bounds = [-500 -100]; 
 
+ %%%%%% Pulses of O2 %%%%%%%
+ bgc.O2Pulses = 1;          % 1 is on
+ bgc.pulse_period = 20;     % days
+ bgc.pulse_amplitude = 5.0; % mmol O2 / m3
+ bgc.pulse_depbounds = [-300 -200];
+ 
  % Calculate BGC/N-cycling parameters  that depend on bgc1d_initbgc_params
  if bgc.depparams
     bgc = bgc1d_initialize_DepParam(bgc);
