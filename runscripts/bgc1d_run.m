@@ -145,3 +145,18 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
  plot(bgc.noo, bgc.zgrid); title("NOO")
  subplot(235)
  plot(bgc.aox, bgc.zgrid); title("AOX")
+
+ figure(3)
+ subplot(231)
+ plot(bgc.remox, bgc.zgrid); title("Oxic remin (PON)")
+ subplot(232)
+ plot(bgc.remden1, bgc.zgrid); title("NAR remin (PON)")
+ subplot(233)
+ plot(bgc.remden2, bgc.zgrid); title("NIR remin (PON)")
+ subplot(234)
+ plot(bgc.ammox, bgc.zgrid); title("Ammonium Ox")
+ subplot(235)
+ plot(bgc.nitrox, bgc.zgrid); title("Nitrite Ox")
+ subplot(236)
+ plot(bgc.AnammoxFrac, bgc.zgrid); title("Anammox Frac")
+ 

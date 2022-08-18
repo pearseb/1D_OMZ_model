@@ -36,7 +36,7 @@
  case 1
     % Original formulation - SYang
     % Specifies # timesteps, length and hist in timesteps 
-    years = 25; 
+    years = 50; 
     dt = 86400 ./ 6.0; % timestep in seconds bgc.hist =  500; 
     nt = years .* ((365 .* 86400) ./ dt);% Simulation length in timesteps
     hist = 365 .* 86400 ./ dt; % save a snapshot every year

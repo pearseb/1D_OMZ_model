@@ -279,7 +279,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
             + (u_aox .* tr.aox .* bgc.aox_e_no3);
 
  sms.n2  =  ((u_facnir .* tr.facnir ./ bgc.facnir_y_no2 .* (1 - facnir_aerob))...
-            + (u_aox .* tr.aox .* bgc.aox_e_n2)) * 0.5;
+            + (u_aox .* tr.aox .* bgc.aox_e_n2)) .* 0.5;
 
  sms.pon =  mort_total...
             - (tr.facnar .* u_facnar ./ facnar_y_org)...
@@ -290,14 +290,15 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  %---------------------------------------------------------------------- 
  % (9) Here adds diagnostics, to be handy when needed
  %---------------------------------------------------------------------- 
- diag.RemOx   = RemOx;		% mmolC/m3/s
- diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		% mmolN/m3/s
- diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		% mmolN/m3/s
- diag.Anammox = Anammox;	% mmolN2/m3/s
- diag.RemDen1 = RemDen1;	% mmolC/m3/s
- diag.RemDen2 = RemDen2;	% mmolC/m3/s
+ diag.RemOx   = (tr.facnar .* u_facnar ./ facnar_y_org .* facnar_aerob)...
+                +(tr.facnir .* u_facnir ./ facnir_y_org .* facnir_aerob);	% mmol (PON) /m3/s
+ diag.Ammox   = (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4);		    % mmol NH4 /m3/s
+ diag.Nitrox  = (u_noo .* tr.noo ./ bgc.noo_y_no2);		    % mmol NO2 /m3/s
+ diag.Anammox = (u_aox .* tr.aox .* bgc.aox_e_n2 .* 0.5);	% mmol N2 /m3/s
+ diag.RemDen1 = (tr.facnar .* u_facnar ./ facnar_y_org .* (1 - facnar_aerob));	% mmol (PON) /m3/s
+ diag.RemDen2 = (tr.facnir .* u_facnir ./ facnir_y_org .* (1 - facnir_aerob));	% mmol (PON) /m3/s
  diag.RemDen3 = RemDen3; 	% mmolC/m3/s
- diag.RemDen  = RemDen1 + RemDen2 + RemDen3;	%mmolC/m3/s
+ diag.RemDen  = diag.RemDen1 + diag.RemDen2;	    % mmol (PON) /m3/s
  diag.Jno2_hx = Jno2_hx;	% mmolN/m3/s
  diag.Jnn2o_hx   = Jnn2o_hx;	% mmolN/m3/s
  diag.Jnn2o_nden = Jnn2o_nden;	% mmolN/m3/s
@@ -305,7 +306,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  diag.Jn2o_cons = sms.n2oind.den3;					% mmolN2O/m3/s
  diag.Jno2_prod = Jno2_hx + bgc.NCden1 .* RemDen1;			% mmolN/m3/s
  diag.Jno2_cons = - bgc.NCden2 .* RemDen2 - Anammox - Nitrox;		% mmolN/m3/s
- diag.kpon = -(RemDen1 -RemDen2-RemDen3-RemOx) ./ tr.pon;		% 1/s
+ diag.kpon = -(diag.RemDen1 - diag.RemDen2 - diag.RemOx) ./ tr.pon;		% 1/s
  %---------------------------------------------------------------------- 
 
  if bgc.RunIsotopes

@@ -90,37 +90,19 @@
  %sms = bgc1d_sms_diag(bgc); % old code, sms_diag now obsolete, use directly sourcesink 
  [sms diag] = bgc1d_sourcesink(bgc,tr); 
  % Converts from (uM N/s) to (nM N/d)
- cnvrt = 1000*3600*24;
- bgc.remox      = diag.RemOx      * cnvrt;	% nM C/d
- bgc.ammox      = diag.Ammox      * cnvrt;	% nM n/d
+ cnvrt = 1000 * 86400;
+ bgc.remox      = diag.RemOx      * cnvrt;	    % nM N/d
+ bgc.ammox      = diag.Ammox      * cnvrt;	    % nM n/d
  bgc.anammox    = 2.0 * diag.Anammox * cnvrt; 	% nM N/d : Units of N, not N2
- bgc.nitrox     = diag.Nitrox     * cnvrt;	% nM n/d
- bgc.remden     = diag.RemDen     * cnvrt;	% nM C/d
- bgc.remden1    = diag.RemDen1    * cnvrt;	% nM C/d
- bgc.remden2    = diag.RemDen2    * cnvrt;	% nM C/d
- bgc.remden3    = diag.RemDen3    * cnvrt;	% nM C/d
- bgc.jnn2o_hx   = diag.Jnn2o_hx   * cnvrt;	% nM N/d
- bgc.jnn2o_nden = diag.Jnn2o_nden * cnvrt;	% nM N/d
- bgc.jno2_hx    = diag.Jno2_hx    * cnvrt;	% nM N/d
- bgc.jn2o_prod  = 2.0 * diag.Jn2o_prod * cnvrt;	% nM N/d : Units of N, not N2O
- bgc.jn2o_cons  = 2.0 * diag.Jn2o_cons * cnvrt;	% nM N/d : Units of N, not N2O
- bgc.jno2_prod  = diag.Jno2_prod  * cnvrt;	% nM n/d
- bgc.jno2_cons  = diag.Jno2_cons  * cnvrt;	% nM n/d
- bgc.sms_n2o    = sms.n2o         * cnvrt;	% nM n/d
-
- % Other (for convenience)
- bgc.nh4tono2 = bgc.jno2_hx;
- bgc.no2tono3 = bgc.nitrox;
- % Denitrification rates
- bgc.no3tono2    = bgc.NCden1 * bgc.remden1;					% nM N/d
- bgc.no2ton2o    =   2 * sms.n2oind.den2 * cnvrt;   				% nM N/d : Units of N, not N2O
- bgc.n2oton2     = - 2 * sms.n2oind.den3 * cnvrt;   				% nM N/d : Units of N, not NO
- bgc.noxton2o    = bgc.no2ton2o;                         			% nM N/d : Units of N, not N2O
- % N2O formation
- bgc.n2onetden   = bgc.NCden2 * bgc.remden2 - 2.0 * bgc.NCden3 * bgc.remden3;	% nM N/d : Units of N, not N2O
- bgc.nh4ton2o    = bgc.jnn2o_hx + bgc.jnn2o_nden;    				% nM N/d : Units of N, not N2O
+ bgc.nitrox     = diag.Nitrox     * cnvrt;	    % nM N/d
+ bgc.remden     = diag.RemDen     * cnvrt;	    % nM N/d
+ bgc.remden1    = diag.RemDen1    * cnvrt;	    % nM N/d
+ bgc.remden2    = diag.RemDen2    * cnvrt;	    % nM N/d
+ 
+ % N2 formation
+ bgc.no2ton2    = (bgc.remden2 .* bgc.facnir_y_Norg ./ bgc.facnir_y_no2);    %nM N/d : Units of N, not N2
  % Anammox fraction
- bgc.AnammoxFrac = bgc.anammox ./ (bgc.anammox + bgc.NCden2.*bgc.remden2 + bgc.jn2o_prod); % non-dimensional
+ bgc.AnammoxFrac = bgc.anammox ./ (bgc.anammox + bgc.no2ton2 ); % non-dimensional
 
  % Adds estimate of particle flux
  % This is somewhat approximate because it's recalculated from POC
