@@ -114,6 +114,16 @@
     bgc.restore.aoo_cout = ppval(bgc.restore.aoo_cs,bgc.zgrid);
  end
 
+ if ~(bgc.AOXrest==0)
+    tdepth = -abs(Farfield.zgrid);
+    tconc  = Farfield.o2*0 + 0.1;
+    ibad = find(isnan(tconc));
+    tdepth(ibad) = [];
+    tconc(ibad) = [];
+    bgc.restore.aox_cs = spline(tdepth,tconc);
+    bgc.restore.aox_cout = ppval(bgc.restore.aox_cs,bgc.zgrid);
+ end
+
  if ~(bgc.NOOrest==0)
     tdepth = -abs(Farfield.zgrid);
     tconc  = Farfield.o2*0 + 0.1;
