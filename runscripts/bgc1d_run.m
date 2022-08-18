@@ -120,3 +120,22 @@ addpath(genpath('/Users/pearseb/Dropbox/PostDoc/1D_OMZ_model/iNitrOMZ/'));
     bgc1d_plot(bgc); 
  end
 
+ figure(1)
+ subplot(331)
+ plot(bgc.o2, bgc.zgrid); title("O2")
+ subplot(332)
+ plot(bgc.nh4, bgc.zgrid); title("NH4")
+ subplot(333)
+ plot(bgc.no2, bgc.zgrid); title("NO2")
+ subplot(334)
+ plot(bgc.no3, bgc.zgrid); title("NO3")
+ subplot(335)
+ plot(bgc.pon, bgc.zgrid); title("PON")
+ subplot(336)
+ plot(bgc.facnar, bgc.zgrid); title("FACNAR")
+ subplot(337)
+ plot(bgc.facnir, bgc.zgrid); title("FACNIR")
+ subplot(338)
+ plot(bgc.aoo, bgc.zgrid); title("AOO")
+ subplot(339)
+ plot(bgc.noo, bgc.zgrid); title("NOO")

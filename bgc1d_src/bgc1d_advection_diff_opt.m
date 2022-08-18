@@ -123,13 +123,7 @@ function [sol sadv sdiff ssms srest] = bgc1d_advection_diff(bgc)
     pon(1,indz)=(fpon_out(1,indz)-fpon_out(1,indz+1))/(bgc.dz*sms.kpon(indz));
  end
 
- % % %  Update steady state PON sinking flux (PJB)
- %pon(1,1) = bgc.pon_top;
- %for indz=1:(bgc.nz-1)
- %   % populate PON through depth using Martin-curve
- %   pon(1,indz+1) = pon(1,1) * (bgc.zgrid(indz+1)/bgc.zgrid(1)).^(bgc.b);
- %end
-
+ 
  % % % % % % % % % % % % % % % % % % 
  % % % % Start time-stepping  % % % %
  % % % % % % % % % % % % % % % % % %

@@ -36,8 +36,8 @@
  case 1
     % Original formulation - SYang
     % Specifies # timesteps, length and hist in timesteps 
-    years = 1; 
-    dt = 86400 ./ 24.0; % timestep in seconds bgc.hist =  500; 
+    years = 100; 
+    dt = 86400 ./ 6.0; % timestep in seconds bgc.hist =  500; 
     nt = years .* ((365 .* 86400) ./ dt);% Simulation length in timesteps
     hist = 365 .* 86400 ./ dt; % save a snapshot every year
     endTimey = nt*dt/(365*86400); % end time of simulation (years)
@@ -146,11 +146,11 @@
 
  %%%%%% On and off switches %%%%%%%%%
  % Restoring switches: 1 to restore, 0 for no restoring
- bgc.RestoringOff = 1;	% 1: turns restoring off for all variables
+ bgc.RestoringOff = 0;	% 1: turns restoring off for all variables
 			% (supersedes all following terms, used to speedup code)
  bgc.PO4rest = 0;
  bgc.NO3rest = 0;
- bgc.O2rest  = 0;
+ bgc.O2rest  = 1;
  bgc.N2Orest = 0 ;
  bgc.NH4rest = 0;
  bgc.N2rest  = 0;
@@ -185,9 +185,9 @@
  % O2 intrusion in the OMZ while keeping restoring in the rest of the
  % water column
  % As usual, 1 is on and 0 is off 
- bgc.forceanoxic = 0;
+ bgc.forceanoxic = 1;
  % Choose depth range
- bgc.forceanoxic_bounds = [-350 -100]; 
+ bgc.forceanoxic_bounds = [-500 -100]; 
 
  % Calculate BGC/N-cycling parameters  that depend on bgc1d_initbgc_params
  if bgc.depparams

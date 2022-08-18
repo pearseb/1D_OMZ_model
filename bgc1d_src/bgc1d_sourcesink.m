@@ -19,8 +19,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  	tr.(tmpvar{indf}) = tmp;
  end
  
- % Set some constants
- d2s = 86400.0;
+ pon = tr.pon .* 0.1; 
 
  % % % % % % % % % % % % % % % % %
  % % % % Uptake rates (p)  % % % %
@@ -29,12 +28,12 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  p_het_oxy     = bgc.het_po_coef .* tr.o2;                                      % Uptake of oxygen by heterotrophs
  
  p_facnar_no3  = bgc.facnar_Vmax_no3  .* ( tr.no3 ./ (tr.no3 + bgc.nar_Kno3));  % Uptake of NO3
- p_facnar_Oorg = bgc.facnar_Vmax_Oorg .* ( tr.pon ./ (tr.pon + bgc.het_Korg) ); % Uptake of organic matter
- p_facnar_Norg = bgc.facnar_Vmax_Norg .* ( tr.pon ./ (tr.pon + bgc.het_Korg) ); % Uptake of organic matter
+ p_facnar_Oorg = bgc.facnar_Vmax_Oorg .* ( pon ./ (pon + bgc.het_Korg) ); % Uptake of organic matter
+ p_facnar_Norg = bgc.facnar_Vmax_Norg .* ( pon ./ (pon + bgc.het_Korg) ); % Uptake of organic matter
  
  p_facnir_no2  = bgc.facnir_Vmax_no2  .* ( tr.no2 ./ (tr.no2 + bgc.nir_Kno2));  % Uptake of NO2
- p_facnir_Oorg = bgc.facnir_Vmax_Oorg .* ( tr.pon ./ (tr.pon + bgc.het_Korg) ); % Uptake of organic matter
- p_facnir_Norg = bgc.facnir_Vmax_Norg .* ( tr.pon ./ (tr.pon + bgc.het_Korg) ); % Uptake of organic matter
+ p_facnir_Oorg = bgc.facnir_Vmax_Oorg .* ( pon ./ (pon + bgc.het_Korg) ); % Uptake of organic matter
+ p_facnir_Norg = bgc.facnir_Vmax_Norg .* ( pon ./ (pon + bgc.het_Korg) ); % Uptake of organic matter
  
  p_aoo_nh4     = bgc.aoo_Vmax_nh4 .* ( tr.nh4 ./ (tr.nh4 + bgc.aoo_Knh4) );     % Uptake of NH4
  p_aoo_oxy     = bgc.aoo_po_coef .* tr.o2;                                      % Uptake of oxygen
@@ -42,18 +41,19 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  p_noo_no2     = bgc.noo_Vmax_no2 .* ( tr.no2 ./ (tr.no2 + bgc.noo_Kno2) );     % Uptake of NO2
  p_noo_oxy     = bgc.noo_po_coef .* tr.o2;                                      % Uptake of oxygen
 
+
  % % % % % % % % % % % % % % % % %
  % % % % Growth rates (u)  % % % %
  % % % % % % % % % % % % % % % % %
  
- u_facnar_aer = max(0.0, min((p_facnar_Oorg .* bgc.facnar_y_Oorg), (p_het_oxy .* bgc.facnar_y_oxy))) ./ d2s; 
- u_facnar_ana = max(0.0, min((p_facnar_Norg .* bgc.facnar_y_Norg), (p_facnar_no3 .* bgc.facnar_y_no3))) ./ d2s; 
+ u_facnar_aer = max(0.0, min((p_facnar_Oorg .* bgc.facnar_y_Oorg), (p_het_oxy .* bgc.facnar_y_oxy))); 
+ u_facnar_ana = max(0.0, min((p_facnar_Norg .* bgc.facnar_y_Norg), (p_facnar_no3 .* bgc.facnar_y_no3))); 
  
- u_facnir_aer = max(0.0, min((p_facnir_Oorg .* bgc.facnir_y_Oorg), (p_het_oxy .* bgc.facnir_y_oxy))) ./ d2s; 
- u_facnir_ana = max(0.0, min((p_facnir_Norg .* bgc.facnir_y_Norg), (p_facnir_no2 .* bgc.facnir_y_no2))) ./ d2s; 
+ u_facnir_aer = max(0.0, min((p_facnir_Oorg .* bgc.facnir_y_Oorg), (p_het_oxy .* bgc.facnir_y_oxy))); 
+ u_facnir_ana = max(0.0, min((p_facnir_Norg .* bgc.facnir_y_Norg), (p_facnir_no2 .* bgc.facnir_y_no2))); 
  
- u_aoo = max(0.0, min((p_aoo_nh4 .* bgc.aoo_y_nh4), (p_aoo_oxy .* bgc.aoo_y_oxy))) ./ d2s; 
- u_noo = max(0.0, min((p_noo_no2 .* bgc.noo_y_no2), (p_noo_oxy .* bgc.noo_y_oxy))) ./ d2s; 
+ u_aoo = max(0.0, min((p_aoo_nh4 .* bgc.aoo_y_nh4), (p_aoo_oxy .* bgc.aoo_y_oxy))); 
+ u_noo = max(0.0, min((p_noo_no2 .* bgc.noo_y_no2), (p_noo_oxy .* bgc.noo_y_oxy))); 
 
 
  % % % % % % % % % % % % % % % % %
@@ -92,15 +92,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  end
  
  
- % % % % % % % % % % % % % % %
- % % % % Mortality (m) % % % %
- % % % % % % % % % % % % % % %
  
- min_bio = 1e-4;
- mort = 0.1 ./ d2s; 
-
- 
-
  %!!! mm1 = Michaelis-Menton hyperbolic growth (var / var * k) where k is
  %!!! concentration of var where growth rate is half its maximum value
     %----------------------------------------------------------------------
@@ -208,7 +200,7 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  %---------------------------------------------------------------------- 
  %sms.o2   =  -bgc.OCrem .* RemOx - 1.5.*Ammox - 0.5 .* Nitrox;
  %sms.no3  =  Nitrox - bgc.NCden1 .* RemDen1; % .* bgc.r14no3;
- sms.pon  =  -(RemOx + RemDen1 + RemDen2 + RemDen3);
+ %sms.pon  =  -(RemOx + RemDen1 + RemDen2 + RemDen3);
  sms.po4  =  bgc.PCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3);
  %sms.nh4  =  bgc.NCrem .* (RemOx + RemDen1 + RemDen2 + RemDen3) - (Jnn2o_hx + Jno2_hx + Jnn2o_nden) - Anammox; % .* bgc.r14nh4;
  %sms.no2  =  Jno2_hx + bgc.NCden1 .* RemDen1 - bgc.NCden2 .* RemDen2 - Anammox - Nitrox; % .* bgc.r14no2;
@@ -228,35 +220,63 @@ function [sms diag] =  bgc1d_sourcesink(bgc,tr);
  % Biomasses %
  % % % % % % %
 
- sms.facnar = (tr.facnar .* u_facnar) - (mort .* tr.facnar .* max(0.0, tr.facnar - min_bio));
- sms.facnir = (tr.facnir .* u_facnir) - (mort .* tr.facnir .* max(0.0, tr.facnir - min_bio));
- sms.aoo = (tr.aoo .* u_aoo) - (mort .* tr.aoo .* max(0.0, tr.aoo - min_bio)); 
- sms.noo = (tr.noo .* u_noo) - (mort .* tr.noo .* max(0.0, tr.noo - min_bio));
+ sms.facnar = (tr.facnar .* u_facnar)...
+              - (bgc.resp .* max(0.0, tr.facnar - bgc.min_bio))*0.0...
+              - (bgc.mort .* tr.facnar .* max(0.0, tr.facnar - bgc.min_bio));
+ sms.facnir = (tr.facnir .* u_facnir)...
+              - (bgc.resp .* max(0.0, tr.facnir - bgc.min_bio))*0.0...
+              - (bgc.mort .* tr.facnir .* max(0.0, tr.facnir - bgc.min_bio));
+ sms.aoo = (tr.aoo .* u_aoo)...
+           - (bgc.resp .* max(0.0, tr.aoo - bgc.min_bio))*0.0...
+           - (bgc.mort .* tr.aoo .* max(0.0, tr.aoo - bgc.min_bio)); 
+ sms.noo = (tr.noo .* u_noo)...
+           - (bgc.resp .* max(0.0, tr.noo - bgc.min_bio))*0.0...
+           - (bgc.mort .* tr.noo .* max(0.0, tr.noo - bgc.min_bio));
+
  
  % % % % % % % 
  % Substrate %
  % % % % % % %
+ 
+ mort_total =  (bgc.mort .* tr.facnar .* max(0.0, tr.facnar - bgc.min_bio))...
+              +(bgc.mort .* tr.facnir .* max(0.0, tr.facnir - bgc.min_bio))...
+              +(bgc.mort .* tr.aoo .* max(0.0, tr.aoo - bgc.min_bio))...
+              +(bgc.mort .* tr.noo .* max(0.0, tr.noo - bgc.min_bio));
+ resp_total =  (bgc.resp .* max(0.0, tr.facnar - bgc.min_bio))...
+              +(bgc.resp .* max(0.0, tr.facnir - bgc.min_bio))...
+              +(bgc.resp .* max(0.0, tr.aoo - bgc.min_bio))...
+              +(bgc.resp .* max(0.0, tr.noo - bgc.min_bio));
 
- sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .*facnar_aerob )...
+ sms.o2  =  -(u_facnar .* tr.facnar ./ bgc.facnar_y_oxy .* facnar_aerob )...
             - (u_facnir .* tr.facnir ./ bgc.facnir_y_oxy .* facnir_aerob)...
-            - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy) - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
- sms.nh4 =  bgc.NCrem .* RemDen3...
+            - (u_aoo .* tr.aoo ./ bgc.aoo_y_oxy)...
+            - (u_noo .* tr.noo ./ bgc.noo_y_oxy);
+
+ sms.nh4 =  resp_total...
             + (u_facnar .* tr.facnar .* (1./facnar_y_org - 1))...
             + (u_facnir .* tr.facnir .* (1./facnir_y_org - 1))...
-            - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4) - Anammox - (u_noo .* tr.noo);
+            - (u_aoo .* tr.aoo ./ bgc.aoo_y_nh4)...
+            - (u_noo .* tr.noo)...
+            - Anammox;
+
  sms.no2 =  (u_aoo .* tr.aoo .* (1./bgc.aoo_y_nh4 - 1))...
             + (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob))...
             - (u_facnir .* tr.facnir ./ bgc.facnir_y_no2 .* (1 - facnir_aerob))...
-            - Anammox - (u_noo .* tr.noo ./ bgc.noo_y_no2);
- sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2) - (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob));
- 
- sms.pon =  (mort .* tr.facnar .* max(0.0, tr.facnar - min_bio))...
-            + (mort .* tr.facnir .* max(0.0, tr.facnir - min_bio))...
-            + (mort .* tr.aoo .* max(0.0, tr.aoo - min_bio))...
-            + (mort .* tr.noo .* max(0.0, tr.noo - min_bio))...
-            - RemDen3 - (tr.facnar .* u_facnar ./ facnar_y_org) - (tr.facnir .* u_facnir ./ facnir_y_org);
- 
- % PJB
+            - (u_noo .* tr.noo ./ bgc.noo_y_no2)...
+            - Anammox;
+
+ sms.no3 =  (u_noo .* tr.noo ./ bgc.noo_y_no2)...
+            - (u_facnar .* tr.facnar ./ bgc.facnar_y_no3 .* (1 - facnar_aerob));
+
+ sms.n2  =  (u_facnir .* tr.facnir ./ bgc.facnir_y_no2 .* (1 - facnir_aerob)) * 0.5...
+            + Anammox;
+
+ sms.pon =  mort_total...
+            - (tr.facnar .* u_facnar ./ facnar_y_org)...
+            - (tr.facnir .* u_facnir ./ facnir_y_org)...
+            - RemDen3;
+
+ sms.kpon = sms.pon ./ tr.pon; 
 
  %---------------------------------------------------------------------- 
  % (9) Here adds diagnostics, to be handy when needed

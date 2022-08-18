@@ -26,9 +26,9 @@
     restoring.o2 = zeros(1,length(t.o2));
  else
     if bgc.forceanoxic == 1
-	cout(find(bgc.zgrid==bgc.forceanoxic_bounds(2)):find(bgc.zgrid==bgc.forceanoxic_bounds(1)))=0;
+	bgc.restore.o2_cout(find(bgc.zgrid==bgc.forceanoxic_bounds(2)):find(bgc.zgrid==bgc.forceanoxic_bounds(1)))=0;
     end
-    restoring.o2 = (bgc.restore.o2_cout-t.o2)./tauh;
+    restoring.o2 = (bgc.restore.o2_cout-t.o2) ./ tauh .* 25;
  end
 
  if bgc.N2Orest==0

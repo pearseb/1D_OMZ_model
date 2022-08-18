@@ -12,6 +12,22 @@
  bgc.stoch_c = 42.0;
  bgc.stoch_d = 16.0;
  
+
+ %%%%%%% Growth rates %%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ bgc.het_mumax = 0.5 / d2s;   % 0.5   % Max. specific doubling rate of facultative heterotrophs (SAR11 bacteria) (/day) - Rappe et al. 2002; Kirkman et al. 2016
+ bgc.aoo_mumax = 0.5 / d2s;   % 0.5   % Wutcher et al. 2006; Horak et al. 2013; Shafiee et al. 2019; Qin et al. 2015
+ bgc.noo_mumax = 1.0 / d2s;   % 1.0   % Spieck et al. 2014; Kitzinger et al. 2020
+ bgc.aox_mumax = 0.2 / d2s;   % 0.2   % Okabe et al. 2021 ISME | Lotti et al. 2014
+ 
+
+ %%%%%%% Mortality %%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%
+ bgc.min_bio = 1e-3;            % minimum biomass of any group beneath which mortality stops
+ bgc.mort = 1.0 / d2s;         % rate of mortality (quadratic)
+ bgc.resp = 0.0 / d2s;         % rate of respiration (linear)
+ 
+
  %%%%%%% Aerobic heterotroph %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % Stoichiometry
@@ -31,9 +47,9 @@
  bgc.het_y_org = bgc.het_y_org ./ bgc.het_CN .* (bgc.stoch_a./bgc.stoch_d);   % Convert yield to units of nitrogen (mol bioN / mol orgN)
  bgc.het_y_oxy = substrate_yield(bgc.het_y_org, bgc.het_CN, bgc.het_HN, bgc.het_ON, bgc, 4.0); % yield of biomass per unit oxygen reduced
  % kinetics
- bgc.het_mumax = 0.5;   % 0.5   % Max. specific doubling rate of facultative heterotrophs (SAR11 bacteria) (/day) - Rappe et al. 2002; Kirkman et al. 2016
  bgc.het_Vmax_org = bgc.het_mumax ./ bgc.het_y_org;
  bgc.het_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
+
 
  %%%%%%% Nitrate reducing heterotroph %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,6 +62,7 @@
  bgc.nar_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
  bgc.nar_Kno3  = 4.0;   % 4.0   % Half sat. constant for NO3 uptake  (Almeida et al. 1995)
  
+
  %%%%%%% Nitrite reducing heterotroph %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  den_penalty = 0.9;
@@ -57,6 +74,7 @@
  bgc.nir_Korg  = 0.1;   % 0.1   % Half sat. constant for organic N uptake  (guess)
  bgc.nir_Kno2  = 4.0;   % 4.0   % Half sat. constant for NO3 uptake  (Almeida et al. 1995)
  
+
  %%%%%%% Facultative NAR heterotroph %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  fac_penalty = 0.8; 
@@ -68,6 +86,7 @@
  bgc.facnar_Vmax_Norg = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnar_y_Norg; 
  bgc.facnar_Vmax_no3  = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnar_y_no3; 
 
+
  %%%%%%% Facultative NIR heterotroph %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  fac_penalty = 0.8; 
@@ -78,6 +97,7 @@
  bgc.facnir_Vmax_Oorg = bgc.het_mumax .* fac_penalty ./ bgc.facnir_y_Oorg; 
  bgc.facnir_Vmax_Norg = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnir_y_Norg; 
  bgc.facnir_Vmax_no2  = bgc.het_mumax .* den_penalty .* fac_penalty ./ bgc.facnir_y_no2; 
+
 
  %%%%%%% Ammonia oxidising archaea %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -99,9 +119,9 @@
  f_aoo = bgc.aoo_y_nh4 ./ (6.0 .* (1./d_aoo - bgc.aoo_y_nh4./d_aoo));   % fraction of electrons going to biosynthesis
  bgc.aoo_y_oxy = f_aoo ./ d_aoo ./ ((1-f_aoo)./4.0);                    % yield of AOO for oxygen
  % kinetics
- bgc.aoo_mumax = 0.5;                                   % 0.5   % Wutcher et al. 2006; Horak et al. 2013; Shafiee et al. 2019; Qin et al. 2015
  bgc.aoo_Vmax_nh4 = bgc.aoo_mumax ./ bgc.aoo_y_nh4;
  bgc.aoo_Knh4  = 0.1;                                   % 0.1   % Martens-Habbena et al. 2009 Nature
+
 
  %%%%%%% Nitrite oxidising bacteria %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -123,9 +143,9 @@
  f_noo = (bgc.noo_y_no2 .* d_noo) ./ 2;                                 % fraction of electrons going to biosynthesis
  bgc.noo_y_oxy = 4 .* f_noo .* (1-f_noo) ./ d_noo;                      % yield of NOO for oxygen
  % kinetics
- bgc.noo_mumax = 1.0;                                   % 1.0   % Spieck et al. 2014; Kitzinger et al. 2020
  bgc.noo_Vmax_no2 = bgc.noo_mumax ./ bgc.noo_y_no2;
  bgc.noo_Kno2  = 0.1;                                   % 0.1   % Reported from OMZ (Sun et al. 2017), oligotrophic conditions (Zhang et al. 2020), and Southern Ocean (Mdutyana et al. 2022)
+
 
  %%%%%%% Anammox bacteria %%%%%%%%
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -145,7 +165,6 @@
  bgc.aox_e_no3 = 11;        % mol NO3 per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number
  bgc.aox_e_n2 = 139;        % mol N (in N2) per mol N biomass (Lotti et al. 2014 Water Research) ***Rounded to nearest whole number 
  % kinetics
- bgc.aox_mumax = 0.2;                                   % 0.2   % Okabe et al. 2021 ISME | Lotti et al. 2014
  bgc.aox_Vmax_nh4 = bgc.aox_mumax ./ bgc.aox_y_nh4;
  bgc.aox_Vmax_no2 = bgc.aox_mumax ./ bgc.aox_y_no2;
  bgc.aox_Knh4  = 0.45;                                  % 0.45  % Awata et al. 2013 for Scalindua
